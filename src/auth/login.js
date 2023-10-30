@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Logo from "../assets/logo.jpg";
+import Logo from "../assets/logo.png";
 import Button from '@mui/material/Button';
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from 'react-google-login';

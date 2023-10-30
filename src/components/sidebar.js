@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { SiAkamai } from 'react-icons/si';
+// import { SiAkamai } from 'react-icons/si';
 import { MdOutlineDangerous } from 'react-icons/md';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { getLinksBasedOnUserRole } from './../data/dummy';
 import { useState, useEffect } from 'react';
 import { useStateContext } from '../contexts/contextProvider';
 import axios from 'axios';
+import  Navlogo  from "../assets/logoN.jpeg"
 // import { useNavigate } from 'react-router-dom';
 // import  RoleLinks  from './role';
 import Host from '../components/api';
@@ -34,7 +35,7 @@ export default function Sidebar() {
 
   useEffect(() => {
     // const Id = sessionStorage.getItem('user_id');
-    
+
     axios({
       url: `${Host}/GetUserRole`,
       method: "POST",
@@ -55,7 +56,9 @@ export default function Sidebar() {
       {activeMenu && (<>
         <div className='flex justify-between items-center'>
           <Link to='/' onClick={() => handleCloseSideBar()} className='items-center gap-3 ml-3 mt-4 flex text-xl font-extrabold tracking-tight dark:text-white text-slate-900'>
-            <SiAkamai /><span>Learnathon</span>
+            <img src={Navlogo} alt="Nav Logo" className="w-10 h-10 rounded-full" />
+            {/* <SiAkamai/> */}
+            <span>Learnathon</span>
           </Link>
           <TooltipComponent className='Menu' position='BottomCenter'>
             <button type='button' onClick={() => setActiveMenu((prevActiveMenu) => !prevActiveMenu)} className='tex-xl rounded-full p-3 hover:bg-light-gray mt-4 block md:hidden'>
