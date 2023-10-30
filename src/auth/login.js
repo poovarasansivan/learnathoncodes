@@ -48,7 +48,6 @@ const Login = () => {
                 sessionStorage.setItem('user_id', data.user.user_id);
                 sessionStorage.setItem('name', data.user.name);
                 setLoginSuccess(true);
-
                 setTimeout(() => {
                     navigate('/Homepage');
                 }, 1000); // Redirect after 3 seconds

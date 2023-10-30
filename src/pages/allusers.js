@@ -14,7 +14,6 @@ import Host from '../components/api';
 function Allusers() {
     const navigate = useNavigate();
     var id = sessionStorage.getItem("user_id");
-    console.log(id);
     if (id === null || id === undefined) {
         navigate('/login');
     }
