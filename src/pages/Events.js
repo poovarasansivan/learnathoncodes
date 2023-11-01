@@ -14,7 +14,6 @@ export default function Events() {
         <SideBarnav body={<Body />} />
     );
 }
-
 function Body() {
     const navigate = useNavigate()
     var id = sessionStorage.getItem("user_id")

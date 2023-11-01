@@ -35,6 +35,7 @@ function Body() {
         axios.post(`${Host}/category/getDetails`, { id: parseInt(categoryId) })
             .then((res) => {
                 let data = res.data;
+                // console.log(data)
                 if (data.success) {
                     setCategoryDetails([data.data]);
                 }

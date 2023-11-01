@@ -1,31 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import Button from '@mui/material/Button';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
+import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import { useNavigate } from 'react-router-dom';
-const Incharge = [
-  {
-    value: 'Sathish',
-    label: 'Sathish',
-  },
-  {
-    value: 'Rishvanth',
-    label: 'Rishvanth',
-  },
-  {
-    value: 'Poovarasan',
-    label: 'Poovarasan',
-  },
-];
+import axios from "axios";
+import Host from '../components/api';
+import MenuItem from '@mui/material/MenuItem';
 
 const style = {
   position: 'absolute',
@@ -38,12 +21,52 @@ const style = {
   p: 4,
 };
 
-export default function AddnewCategory({ open, handleClose }) {
-  const navigate = useNavigate();
-  var id = sessionStorage.getItem("user_id")
-  if (id === null || id === undefined) {
-    navigate('/login');
-  }
+const AddnewCategory = ({ open, handleClose }) => {
+  const [categoryName, setCategoryName] = useState('');
+  const [description, setDescription] = useState('');
+  const [maxTeam, setMaxTeam] = useState('');
+  const [incharge, setIncharge] = useState('');
+const Created_by=sessionStorage.getItem('user_id')
+  const [inchargeOptions, setInchargeOptions] = useState([]);
+
+  useEffect(() => {
+    axios.post(`${Host}/GetUserAdd`, { id: sessionStorage.getItem('user_id') })
+      .then((res) => {
+        setInchargeOptions(res.data.events);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  const handleFormSubmit = async () => {
+    const requestData = {
+      category_name: categoryName,
+      description: description,
+      max_team: parseInt(maxTeam),
+      incharge: incharge,
+      created_by:Created_by,
+    };
+
+    try {
+      const response = await fetch(`${Host}/Insertcategory`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestData),
+      });
+
+      if (response.ok) {
+        console.log('Data inserted successfully');
+      } else {
+        console.error('Error inserting data');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   return (
     <div>
       <Modal
@@ -61,6 +84,7 @@ export default function AddnewCategory({ open, handleClose }) {
           <Box sx={style}>
             <Box
               component="form"
+              onSubmit={handleFormSubmit}
               sx={{
                 '& .MuiTextField-root': { m: 1, width: '32ch' },
               }}
@@ -72,6 +96,8 @@ export default function AddnewCategory({ open, handleClose }) {
                   required
                   id="outlined-required"
                   label="Title"
+                  value={categoryName}
+                  onChange={(e) => setCategoryName(e.target.value)}
                 />
                 <TextField
                   required
@@ -79,28 +105,31 @@ export default function AddnewCategory({ open, handleClose }) {
                   label="Description"
                   multiline
                   maxRows={8}
+                  minRows={2}
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
                 />
+                {/* <TextField
+                  required
+                  label="Incharge"
+                  value={Created_by}
+                  onChange={(e) => setCreated_by(e.target.value)}
+                /> */}
                 <TextField
                   id="outlined-required"
                   select
                   label="Select Incharge"
                   defaultValue="Select"
                   helperText="Please select Incharge"
+                  value={incharge}
+                  onChange={(e) => setIncharge(e.target.value)}
                 >
-                  {Incharge.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                  {inchargeOptions.map((option, index) => (
+                    <MenuItem key={index} value={option.name}>
+                      {option.name}
                     </MenuItem>
                   ))}
                 </TextField>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer dateAdapter={AdapterDayjs} components={['DatePicker']}>
-                    <DatePicker
-                      label={'Event Date'}
-                      views={['year', 'month', 'day']}
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
                 <TextField
                   id="outlined-number"
                   label="Max Teams"
@@ -108,9 +137,11 @@ export default function AddnewCategory({ open, handleClose }) {
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  value={maxTeam}
+                  onChange={(e) => setMaxTeam(e.target.value)}
                 />
                 <Stack spacing={2} className="flex justify-center" direction="row">
-                  <Button variant="contained">Submit</Button>
+                  <Button variant="contained" type="submit">Submit</Button>
                 </Stack>
               </div>
             </Box>
@@ -119,4 +150,6 @@ export default function AddnewCategory({ open, handleClose }) {
       </Modal>
     </div>
   );
-}
+};
+
+export default AddnewCategory;

@@ -57,7 +57,7 @@ function Body() {
       url: `${Host}/users/${rollno}`,
       method: "get",
     }).then((res) => {
-      console.log(res)
+      // console.log(res)
       if (user === 2) {
         setUser2(res.data);
       }

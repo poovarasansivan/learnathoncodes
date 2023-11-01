@@ -7,7 +7,7 @@ function Logout() {
   const navigate = useNavigate()
 
   const onSuccess = (_res) => {
-    console.log("LOGOUT SUCCESS!");
+    // console.log("LOGOUT SUCCESS!");
     navigate('/Login');
 
   }

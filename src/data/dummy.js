@@ -101,6 +101,7 @@ export const getLinksBasedOnUserRole = (userRole) => {
               name: 'My Events',
               icon: <RiContactsLine />,
             },
+
           ],
         },
       ];

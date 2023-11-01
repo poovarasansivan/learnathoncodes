@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { IoIosArrowForward } from "react-icons/io";
+import { IoIosAddCircle, IoIosArrowForward } from "react-icons/io";
 import { Header } from '../components';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { useNavigate } from 'react-router-dom';
-// import { AddnewCategory } from '../components';
+import { AddnewCategory } from '../components';
 import SideBarnav from '../components/sideBarnav';
 import axios from "axios";
 import Host from '../components/api';
@@ -14,8 +14,23 @@ const Category = () => {
   if (id === null || id === undefined) {
     navigate('/login');
   }
-  // const [isAddnewCategoryOpen, setIsAddnewCategoryOpen] = useState(false);
+  const [isAddnewCategoryOpen, setIsAddnewCategoryOpen] = useState(false);
   const [categoryData, setCategoryData] = useState([]);
+  const [userRole, setUserRole] = useState('');
+
+  useEffect(() => {
+    const userid1 = sessionStorage.getItem('user_id');
+
+    axios.post(`${Host}/GetUserRoleC`, { id: userid1 })
+      .then((res) => {
+        let data1 = res.data;
+        setUserRole(data1.events.user_role);
+        // console.log(data1.events.user_role);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   useEffect(() => {
     axios({
@@ -32,17 +47,18 @@ const Category = () => {
       });
   }, []);
 
-  // const openAddnewCategory = () => {
-  //   setIsAddnewCategoryOpen(true);
-  // };
+  const openAddnewCategory = () => {
+    setIsAddnewCategoryOpen(true);
+  };
 
-  // const closeAddnewTeams = () => {
-  //   setIsAddnewCategoryOpen(false);
-  // };
+  const closeAddnewTeams = () => {
+    setIsAddnewCategoryOpen(false);
+  };
 
   const handleCardClick = (categoryId) => {
     navigate(`/Details/${categoryId}`);
   };
+
 
   return (
     <SideBarnav body={
@@ -50,14 +66,18 @@ const Category = () => {
         <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl">
           <div className="flex items-center justify-between " >
             <Header category="Page" title="Category" />
-            {/* <TooltipComponent content="Add New" position="BottomCenter" onClick={openAddnewCategory}>
-              <div className="flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray rounded-lg">
-                <IoIosAddCircle color="#4ade80" className='w-8 h-6' />
-                <p>
-                  <span className="text-green-400 font-medium text-base" >Add New</span>{' '}
-                </p>
-              </div>
-            </TooltipComponent> */}
+
+            {userRole === '1' && ( // Check if userRole is 'admin'
+              <TooltipComponent content="Add New" position="BottomCenter" onClick={openAddnewCategory}>
+                <div className="flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray rounded-lg">
+                  <IoIosAddCircle color="#4ade80" className='w-8 h-6' />
+                  <p>
+                    <span className="text-green-400 font-medium text-base" >Add New</span>{' '}
+                  </p>
+                </div>
+              </TooltipComponent>
+            )}
+
           </div>
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 dark:text-gray-200 dark:bg-secondary-dark-bg'>
             {categoryData.map((item) => (
@@ -74,7 +94,7 @@ const Category = () => {
                     <div className="font-bold text-base items-start ml-0 mb-1 text-gray-600">Topic:</div>
                     <p className='ml-2 text-lg font-bold  text-green-500 '>{item.name}</p>
                   </div>
-                  <p className="text-gray-700 mt-2 text-base">Description: {item.description}</p>
+                  <p className="text-gray-700 mt-2 text-base text-justify">Description: {item.description}</p>
                   <p className="text-gray-700 mt-2 text-base">Incharge: {item.incharge}</p>
                   <p className="text-gray-700 mt-2 text-base">Max Teams: {item.max_team}</p>
                 </div>
@@ -82,7 +102,7 @@ const Category = () => {
             ))}
           </div>
         </div>
-        {/* <AddnewCategory open={isAddnewCategoryOpen} handleClose={closeAddnewTeams} /> */}
+        <AddnewCategory open={isAddnewCategoryOpen} handleClose={closeAddnewTeams} />
       </>
     } />
   );

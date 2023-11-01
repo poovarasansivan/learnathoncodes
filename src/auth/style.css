@@ -1,0 +1,257 @@
+.element-minimalism-login {
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.element-minimalism-login .div {
+  background-color: #ffffff;
+  height: 768px;
+  position: relative;
+  width: 1366px;
+}
+
+.element-minimalism-login .rectangle {
+  height: 700px;
+  left: 649px;
+  object-fit: cover;
+  position: absolute;
+  top: 34px;
+  width: 683px;
+}
+
+.element-minimalism-login .group {
+  height: 105px;
+  left: 168px;
+  position: absolute;
+  top: 122px;
+  width: 351px;
+}
+
+.element-minimalism-login .text-wrapper {
+  color: #1c1c1c;
+  font-family: "Smooch Sans", Helvetica;
+  font-size: 120px;
+  font-weight: 700;
+  left: 0;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 0;
+  white-space: nowrap;
+}
+
+.element-minimalism-login .p {
+  color: #1c1c1c;
+  font-family: "Poppins", Helvetica;
+  font-size: 14px;
+  font-weight: 400;
+  left: 48px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 84px;
+}
+
+.element-minimalism-login .overlap-group-wrapper {
+  height: 24px;
+  left: 160px;
+  position: absolute;
+  top: 478px;
+  width: 366px;
+}
+
+.element-minimalism-login .overlap-group {
+  height: 24px;
+  position: relative;
+  width: 364px;
+}
+
+.element-minimalism-login .login-with-others {
+  color: #1c1c1c;
+  font-family: "Poppins", Helvetica;
+  font-size: 16px;
+  font-weight: 400;
+  left: 113px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 0;
+}
+
+.element-minimalism-login .span {
+  font-weight: 700;
+}
+
+.element-minimalism-login .text-wrapper-2 {
+  color: #1c1c1c;
+  font-family: "Poppins", Helvetica;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.element-minimalism-login .subtract {
+  height: 1px;
+  left: 0;
+  position: absolute;
+  top: 11px;
+  width: 364px;
+}
+
+.element-minimalism-login .overlap-wrapper {
+  height: 52px;
+  left: 160px;
+  position: absolute;
+  top: 326px;
+  width: 366px;
+}
+
+.element-minimalism-login .overlap {
+  background-color: #f2f2f2;
+  border-radius: 13px;
+  height: 52px;
+  position: relative;
+  width: 364px;
+}
+
+.element-minimalism-login .text-wrapper-3 {
+  color: #1c1c1c;
+  font-family: "Poppins", Helvetica;
+  font-size: 12px;
+  font-weight: 400;
+  left: 48px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 17px;
+}
+
+.element-minimalism-login .frame {
+  height: 24px;
+  left: 18px;
+  position: absolute;
+  top: 14px;
+  width: 24px;
+}
+
+.element-minimalism-login .div-wrapper {
+  height: 52px;
+  left: 160px;
+  position: absolute;
+  top: 250px;
+  width: 366px;
+}
+
+.element-minimalism-login .group-2 {
+  height: 52px;
+  left: 160px;
+  position: absolute;
+  top: 402px;
+  width: 366px;
+}
+
+.element-minimalism-login .overlap-2 {
+  background-color: #1c1c1c;
+  border-radius: 13px;
+  height: 52px;
+  position: relative;
+  width: 364px;
+}
+
+.element-minimalism-login .text-wrapper-4 {
+  color: #ffffff;
+  font-family: "Poppins", Helvetica;
+  font-size: 12px;
+  font-weight: 700;
+  left: 166px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 17px;
+}
+
+.element-minimalism-login .group-3 {
+  height: 120px;
+  left: 160px;
+  position: absolute;
+  top: 526px;
+  width: 364px;
+}
+
+.element-minimalism-login .group-wrapper {
+  border: 1px solid;
+  border-color: #1c1c1c;
+  border-radius: 13px;
+  height: 52px;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 364px;
+}
+
+.element-minimalism-login .group-4 {
+  height: 30px;
+  left: 109px;
+  position: relative;
+  top: 10px;
+  width: 146px;
+}
+
+.element-minimalism-login .div-2 {
+  color: #1c1c1c;
+  font-family: "Poppins", Helvetica;
+  font-size: 12px;
+  font-weight: 400;
+  left: 38px;
+  letter-spacing: 0;
+  line-height: normal;
+  position: absolute;
+  top: 6px;
+}
+
+.element-minimalism-login .text-wrapper-5 {
+  color: #1c1c1c;
+  font-family: "Poppins", Helvetica;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.element-minimalism-login .img {
+  height: 30px;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  width: 30px;
+}
+
+.element-minimalism-login .group-5 {
+  border: 1px solid;
+  border-color: #1c1c1c;
+  border-radius: 13px;
+  height: 52px;
+  left: 0;
+  position: absolute;
+  top: 68px;
+  width: 364px;
+}
+
+.element-minimalism-login .group-6 {
+  height: 30px;
+  left: 100px;
+  position: relative;
+  top: 10px;
+  width: 164px;
+}
+
+.element-minimalism-login .vector {
+  height: 137px;
+  left: 0;
+  position: absolute;
+  top: 567px;
+  width: 68px;
+}

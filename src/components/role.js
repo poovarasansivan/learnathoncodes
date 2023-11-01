@@ -22,7 +22,7 @@ export const RoleLinks = () => {
                 console.log(err);
             });
     }, []);
-
+    console.log(userRole)
     switch (userRole) {
         case '1':
             return [
@@ -33,6 +33,7 @@ export const RoleLinks = () => {
                             name: 'HomePage',
                             icon: <FiHome />,
                         },
+                        
                     ],
                 },
                 {
@@ -54,8 +55,10 @@ export const RoleLinks = () => {
                             name: 'My Events',
                             icon: <RiContactsLine />,
                         },
+                        
                     ],
                 },
+               
             ];
 
         case '2':
