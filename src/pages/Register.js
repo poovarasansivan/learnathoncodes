@@ -24,8 +24,13 @@ function Body() {
   const [user3, setUser3] = useState({});
   const { categoryId } = useParams();
   const [formError, setFormError] = useState(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const navigateToCategory = () => {
+    if (isSubmitted) {
+      return;
+    }
+
     const teamName = document.getElementById("teamName").value;
     const member1 = user1.id;
     const member2 = user2.id;
@@ -50,6 +55,8 @@ function Body() {
       .catch((error) => {
         console.error("Error submitting data:", error);
       });
+
+    setIsSubmitted(true);
   };
 
   const getDetails = (rollno, user) => {
@@ -57,7 +64,6 @@ function Body() {
       url: `${Host}/users/${rollno}`,
       method: "get",
     }).then((res) => {
-      // console.log(res)
       if (user === 2) {
         setUser2(res.data);
       }
@@ -92,6 +98,7 @@ function Body() {
             defaultValue="Team name"
             id="teamName"
             onChange={() => setFormError(null)}
+            disabled={isSubmitted}
           />
         </div>
         <div className='mt-5'>
@@ -103,6 +110,7 @@ function Body() {
               getDetails(e.target.value, 1);
             }}
             id="user1"
+            disabled={isSubmitted || user1.id}
           />
           <TextField
             required
@@ -125,6 +133,8 @@ function Body() {
             onChange={(e) => {
               getDetails(e.target.value, 2);
             }}
+            id="user2"
+            disabled={isSubmitted || user2.id}
           />
           <TextField
             required
@@ -147,6 +157,8 @@ function Body() {
             onChange={(e) => {
               getDetails(e.target.value, 3);
             }}
+            id="user3"
+            disabled={isSubmitted || user3.id}
           />
           <TextField
             required
@@ -168,7 +180,9 @@ function Body() {
         </div>
       )}
       <Stack spacing={2} direction="row" className='flex justify-center'>
-        <Button variant="contained" onClick={navigateToCategory}>Submit</Button>
+        <Button variant="contained" onClick={navigateToCategory} disabled={isSubmitted}>
+          Submit
+        </Button>
       </Stack>
     </div>
   );

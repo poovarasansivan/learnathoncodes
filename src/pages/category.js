@@ -17,7 +17,6 @@ const Category = () => {
   const [isAddnewCategoryOpen, setIsAddnewCategoryOpen] = useState(false);
   const [categoryData, setCategoryData] = useState([]);
   const [userRole, setUserRole] = useState('');
-
   useEffect(() => {
     const userid1 = sessionStorage.getItem('user_id');
 
@@ -80,7 +79,7 @@ const Category = () => {
 
           </div>
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 dark:text-gray-200 dark:bg-secondary-dark-bg'>
-            {categoryData.map((item) => (
+            {categoryData && categoryData.map((item) => (
               <div key={item.id} className="bg-gray-50 p-5 rounded-2xl max-h-max-content relative">
                 <div className="flex justify-end absolute top-2 right-2">
                   <TooltipComponent content="View" position="Topright" >

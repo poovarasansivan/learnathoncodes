@@ -61,7 +61,7 @@ export default function BasicTable() {
                             <TableCell align="left">Description</TableCell>
                             <TableCell align="left">Max Team Count</TableCell>
                             <TableCell align="left">Registered Teams Count</TableCell>
-                            <TableCell align="left">Action</TableCell>
+                            {/* <TableCell align="left">Action</TableCell> */}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -80,12 +80,12 @@ export default function BasicTable() {
                                     <TableCell align="left">{row.category_name}</TableCell>
                                     <TableCell align="left">{row.descritpion}</TableCell>
                                     <TableCell align="left">{row.max_team}</TableCell>
-                                    <TableCell align="left">5</TableCell>
-                                    <TableCell align="left">
+                                    <TableCell align="left">{row.category_count}</TableCell>
+                                    {/* <TableCell align="left">
                                         <Stack spacing={2} direction="row">
                                             <Button variant='outlined' color="success" onClick={handlecategoryFormClick}>View</Button>
                                         </Stack>
-                                    </TableCell>
+                                    </TableCell> */}
                                 </TableRow>
                             );
                         })}

@@ -22,14 +22,14 @@ function Body() {
     }
     const { categoryId } = useParams();
     const [categoryDetails, setCategoryDetails] = useState([]);
+    // const [categoryCount, setcategoryCount] = useState([]);
     const [isAlreadyRegistered, setIsAlreadyRegistered] = useState(false);
-    // console.log(isAlreadyRegistered)
+    const [isMaxCountReached, setisMaxCountReached] = useState([]);
+ 
     const navigateToRegister = (categoryId) => {
         navigate(`/Register/${categoryId}`);
     };
-    // var user_id =sessionStorage.getItem("user_id")
-    // console.log(user_id)
-    // console.log(categoryId)
+
     useEffect(() => {
         // Fetch category details
         axios.post(`${Host}/category/getDetails`, { id: parseInt(categoryId) })
@@ -53,6 +53,23 @@ function Body() {
                 console.log(err);
             });
     }, [categoryId]);
+
+    useEffect(() => {
+        axios.post(`${Host}/GetCategoryC`, { id: parseInt(categoryId) })
+            .then((res) => {
+                let data = res.data;
+                if (data.success) {
+                    const categoryCount = data.data[0].category_count;
+                    setisMaxCountReached(categoryCount);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [categoryId]);
+    
+    
+
     return (
         <>
             <div className="m-2 md:m-10 mt-20 p-2 md:p-6 bg-white rounded-3xl">
@@ -81,10 +98,10 @@ function Body() {
                             <div className="font-bold text-lg text-gray-600">MaxTeams:</div>
                             <p className='ml-4 text-lg font-bold text-green-500'>{item.max_team}</p>
                         </div>
-                        <div className="flex items-start mb-2">
+                        {/* <div className="flex items-start mb-2">
                             <div className="font-bold text-lg text-gray-600">MinTeams:</div>
                             <p className='ml-4 text-lg font-bold text-green-500'>10</p>
-                        </div>
+                        </div> */}
                         {/* <div className="flex items-start mb-2">
                             <div className="font-bold text-lg text-gray-600">RegisteredTeamsCount:</div>
                             <p className='ml-4 text-lg font-bold text-green-500'>{item.RegisteredTeamsCount}</p>
@@ -96,8 +113,8 @@ function Body() {
                     </div>
                 ))}
                 <Stack spacing={2} direction="row" className='flex justify-center'>
-                    {isAlreadyRegistered ? (
-                        <p className="text-red-500 font-medium">* Already Registered</p>
+                    {isAlreadyRegistered || (isMaxCountReached>50) ? (
+                        <p className="text-red-500 font-medium">* Already Registered Or Maximum Count Reached</p>
                     ) : (
                         <Button variant="contained" onClick={() => navigateToRegister(categoryId)}>Register Now</Button>
                     )}

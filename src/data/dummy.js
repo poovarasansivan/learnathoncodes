@@ -9,64 +9,40 @@ import { MdOutlineSupervisorAccount } from 'react-icons/md';
 export const Rules = [
   {
     icon: <GoDotFill />,
-    rule: 'This Learnathon Event is applicable to all S3 and S5 Students.',
+    rule: 'The main objective of this Event is to check the conceptual understanding of fundamental courses.',
   },
   {
     icon: <GoDotFill />,
-    rule: 'Duration of the Learnathon is 8 Hours.',
+    rule: 'This Learnathon is a team event for 6 hours open to all S5 students.',
   },
   {
     icon: <GoDotFill />,
-    rule: 'There will be two levels for this competition, and RP will be awarded only if the group participates in both the levels.',
+    rule: 'Each team can have 3 Members maximum. Students may also participate as Individual or team of 2 members. ',
   },
   {
     icon: <GoDotFill />,
-    rule: 'The main objective of this competition is to check the conceptual understanding of fundamental courses.',
+    rule: 'There will be two levels for this Event, and RP will be awarded only if the team participates in both the levels. For teams, the RP will be shared.',
   },
   {
     icon: <GoDotFill />,
-    rule: 'Each team can have 3 Members maximum. Students may also participate as Individual or group of 2 members. For group teams, the RP will be shared.',
+    rule: 'Level 1 : learn a topic and frame a Quality outcome based Question.',
   },
   {
     icon: <GoDotFill />,
-    rule: 'Each group will be given a Topic from Fundamental Courses.',
+    rule: 'Level 2 : Peer evaluation of the outcome based Questions.',
   },
   {
     icon: <GoDotFill />,
-    rule: 'The group has to Explore the fundamental concepts related to the given topic and need to prepare Higher order thinking Questions as per the format.',
+    rule: 'The domains are : C Programming, Datastructures and Database System. A team can register only for any one domain.',
   },
   {
     icon: <GoDotFill />,
-    rule: 'A group can prepare any number of Questions from the same topic.',
+    rule: 'Each domain will have 10 topics. A team should prepare minimum 2 Questions per topic in the registered domain.',
   },
   {
     icon: <GoDotFill />,
-    rule: 'If many groups select the same topic, the RP will be shared among groups.',
+    rule: 'These Questions will be peer evaluated against standard rubrics for Quality.',
   },
-  {
-    icon: <GoDotFill />,
-    rule: 'A group can register for a maximum of two topics.',
-  },
-  {
-    icon: <GoDotFill />,
-    rule: 'These Questions will be shared among the peer groups for evaluation in terms of Quality, Clarity, and Knowledge.',
-  },
-  {
-    icon: <GoDotFill />,
-    rule: 'If the Test item passes the random peer group evaluation, it will be considered for assessment in the next level.',
-  },
-  {
-    icon: <GoDotFill />,
-    rule: 'The test item will be rejected  if nobody could answer it or everybody could answer it.',
-  },
-  {
-    icon: <GoDotFill />,
-    rule: 'A registration form will be circulated to all the students along with fundamental courses. Topics related to selected courses will be given at the event venue.',
-  },
-  {
-    Description: 'Mathematics, Physics, Chemistry, Basics of Computers, Fundamentals of Electronics Engineering, Fundamentals of Electrical Engineering, Digital Electronics , Analog Electronics, Data Structures, Database, Computer Architecture, Operating Systems, Software Engineering, Computer Networks, Web frameworks, Engineering Thermodynamics'
-  }
-
 ];
 
 export const getLinksBasedOnUserRole = (userRole) => {
