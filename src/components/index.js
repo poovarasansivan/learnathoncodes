@@ -12,7 +12,13 @@ import AddnewCategory from "./AddnewCategory";
 import SideBarnav from "./sideBarnav";
 import { RoleLinks } from "./role";
 import Host from "./api";
+import NotFound from "./404page";
+import Editor from "./editor"
+import Question from "./question"
 export {
+    Question,
+    Editor,
+    NotFound,
     Host,
     RoleLinks,
     Sidebar,

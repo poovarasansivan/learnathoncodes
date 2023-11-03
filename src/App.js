@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import { Dashboard, Details, Category, Events, TotalUsers, Users, MyEvents, MyEventDetails, Register, Allusers } from './pages'
-import { ViewTeams, AddEvent, RoleLinks, CategoryForm, AddnewTeams } from './components'
+import { ViewTeams, AddEvent, RoleLinks, CategoryForm,Question, Editor,AddnewTeams,NotFound } from './components'
 import Auth from './auth/login';
 function App() {
     return (
@@ -30,6 +30,9 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/Links" element={<RoleLinks />} />
                 <Route path="/Users" element={<Allusers />} />
+                <Route path="Text Editor" element={<Editor/>}/>
+                <Route path="Create Questions" element={<Question/>}/>
+                <Route path="*" element={<NotFound/>}/>
             </Routes>
             {/* </AuthProvider> */}
         </BrowserRouter>

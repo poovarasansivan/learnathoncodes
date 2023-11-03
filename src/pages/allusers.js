@@ -19,7 +19,7 @@ function Allusers() {
     }
     const [data, setData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const rowsPerPage = 5;
+    const rowsPerPage = 10;
 
     useEffect(() => {
         fetch(`${Host}/users`)

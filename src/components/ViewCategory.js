@@ -22,12 +22,13 @@ function Allusers() {
     const [currentPage, setCurrentPage] = useState(1);
     const [isViewTeamsOpen, setIsViewTeamsOpen] = useState(false);
     const [selectedTeamId, setSelectedTeamId] = useState(null);
-
+   console.log(data)
     const rowsPerPage = 5;
 
     useEffect(() => {
         fetch(`${Host}/teams`)
             .then(response => response.json())
+            // console.log(response)
             .then(data => setData(data));
     }, []);
 

@@ -51,7 +51,7 @@ function Body() {
 
                     <div className="flex items-start mb-2">
                         <div className="font-bold text-lg  text-gray-600">Topic:</div>
-                        <p className='ml-4 text-lg font-bold items-start text-justify text-green-500'>{item.events.category_name}</p>
+                        <p className='ml-4 text-lg font-bold items-start text-justify text-green-500'>{item.events.cname}</p>
                     </div>
                     <div className="flex items-start mb-2">
                         <div className="font-bold text-lg text-gray-600">Incharge:</div>

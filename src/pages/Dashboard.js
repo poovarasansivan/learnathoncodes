@@ -5,9 +5,9 @@ import Stack from '@mui/material/Stack';
 import Files from "../rules/Rules.pdf";
 import SideBarnav from '../components/sideBarnav';
 import axios from 'axios';
-import { FiBarChart } from 'react-icons/fi';
+import { FcBullish } from 'react-icons/fc';
 import { MdOutlineSupervisorAccount } from 'react-icons/md';
-import { BsBoxSeam } from 'react-icons/bs';
+import { MdCategory } from 'react-icons/md';
 import { useEffect } from 'react';
 import Host from '../components/api';
 import { useNavigate } from 'react-router-dom';
@@ -49,7 +49,7 @@ function Body() {
   const HomePageData = [
     {
       icon: <MdOutlineSupervisorAccount />,
-      amount: "100",
+      amount: "150",
       percentage: '-4%',
       title: 'Max Teams',
       iconColor: '#03C9D7',
@@ -57,7 +57,7 @@ function Body() {
       pcColor: 'red-600',
     },
     {
-      icon: <BsBoxSeam />,
+      icon: <MdCategory />,
       amount: Categorycount,
       percentage: '+23%',
       title: 'Total Categories',
@@ -66,7 +66,7 @@ function Body() {
       pcColor: 'green-600',
     },
     {
-      icon: <FiBarChart />,
+      icon: <FcBullish />,
       amount: Registercount,
       percentage: '+38%',
       title: 'Registered Count',
@@ -135,11 +135,6 @@ function Body() {
             <p className="text-gray-700 mt-2 text-base">
               A Learnathon is an intense, time-bound event where individuals or teams collaborate to Learn innovative technology, typically in the fields, software development, or hardware engineering.
             </p>
-          </div>
-          <div className="px-6 pt-4 pb-2">
-            <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Software</span>
-            <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#hardware</span>
-            <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#Both</span>
           </div>
         </div>
 

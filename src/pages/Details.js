@@ -18,14 +18,13 @@ function Body() {
     const navigate = useNavigate()
     var id = sessionStorage.getItem("user_id")
     if (id === null || id === undefined) {
-      navigate('/login');
+        navigate('/login');
     }
     const { categoryId } = useParams();
     const [categoryDetails, setCategoryDetails] = useState([]);
     // const [categoryCount, setcategoryCount] = useState([]);
     const [isAlreadyRegistered, setIsAlreadyRegistered] = useState(false);
     const [isMaxCountReached, setisMaxCountReached] = useState([]);
- 
     const navigateToRegister = (categoryId) => {
         navigate(`/Register/${categoryId}`);
     };
@@ -53,7 +52,6 @@ function Body() {
                 console.log(err);
             });
     }, [categoryId]);
-
     useEffect(() => {
         axios.post(`${Host}/GetCategoryC`, { id: parseInt(categoryId) })
             .then((res) => {
@@ -67,8 +65,8 @@ function Body() {
                 console.log(err);
             });
     }, [categoryId]);
-    
-    
+
+
 
     return (
         <>
@@ -90,10 +88,7 @@ function Body() {
                             <div className="font-bold text-lg text-gray-600">Description:</div>
                             <p className='ml-4 text-base font-semibold text-justify text-gray-600'>{item.description}</p>
                         </div>
-                        <div className="flex items-start mb-2">
-                            <div className="font-bold text-lg text-gray-600">Deadline:</div>
-                            <p className='ml-4 text-lg font-bold text-green-500'>{item.due_date}</p>
-                        </div>
+
                         <div className="flex items-start mb-2">
                             <div className="font-bold text-lg text-gray-600">MaxTeams:</div>
                             <p className='ml-4 text-lg font-bold text-green-500'>{item.max_team}</p>
@@ -113,11 +108,14 @@ function Body() {
                     </div>
                 ))}
                 <Stack spacing={2} direction="row" className='flex justify-center'>
-                    {isAlreadyRegistered || (isMaxCountReached>50) ? (
-                        <p className="text-red-500 font-medium">* Already Registered Or Maximum Count Reached</p>
-                    ) : (
-                        <Button variant="contained" onClick={() => navigateToRegister(categoryId)}>Register Now</Button>
-                    )}
+                    {
+                        // console.log(categoryDetails)
+                        (categoryDetails.length !== 0 && categoryDetails[0].registration === 1) && (!isAlreadyRegistered || (isMaxCountReached > 50)) ? (
+                            <Button variant="contained" onClick={() => navigateToRegister(categoryId)}>Register Now</Button>
+                        ) : (
+                            <p className="text-red-500 font-medium">* Already Registered Or Maximum Count Reached or Registration Closed</p>
+                        )
+                    }
                 </Stack>
             </div>
         </>

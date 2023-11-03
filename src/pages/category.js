@@ -58,7 +58,6 @@ const Category = () => {
     navigate(`/Details/${categoryId}`);
   };
 
-
   return (
     <SideBarnav body={
       <>

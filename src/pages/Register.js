@@ -36,7 +36,7 @@ function Body() {
     const member2 = user2.id;
     const member3 = user3.id;
 
-    if (!teamName || !member1 || !member2 || !member3) {
+    if ((!teamName || !member1) && (member1!==member2&& member1!==member3 && member3!==member2)) {
       setFormError("* All fields are required");
       return;
     }
@@ -49,7 +49,7 @@ function Body() {
       user3: member3,
     })
       .then((response) => {
-        console.log("Data submitted successfully:", response.data);
+        // console.log("Data submitted successfully:", response.data);
         navigate('/Category');
       })
       .catch((error) => {
@@ -127,7 +127,7 @@ function Body() {
         </div>
         <div className='mt-5'>
           <TextField
-            required
+
             label={"Team Member Roll No 2 "}
             defaultValue="Roll no"
             onChange={(e) => {
@@ -137,13 +137,13 @@ function Body() {
             disabled={isSubmitted || user2.id}
           />
           <TextField
-            required
+
             disabled
             defaultValue={user2.name}
             value={user2.name}
           />
           <TextField
-            required
+
             disabled
             defaultValue={user2.year}
             value={user2.year}
@@ -151,7 +151,7 @@ function Body() {
         </div>
         <div className='mt-5'>
           <TextField
-            required
+
             label={"Team Member Roll No 3 "}
             defaultValue="Roll no"
             onChange={(e) => {
@@ -161,13 +161,11 @@ function Body() {
             disabled={isSubmitted || user3.id}
           />
           <TextField
-            required
             disabled
             defaultValue={user3.name}
             value={user3.name}
           />
           <TextField
-            required
             disabled
             defaultValue={user3.year}
             value={user3.year}

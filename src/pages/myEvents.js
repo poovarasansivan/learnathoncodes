@@ -53,10 +53,10 @@ function Body() {
                                         <div className="font-bold text-lg  text-gray-600">Event Name:</div>
                                         <p className='ml-4 text-lg font-bold  text-justify text-green-500'>{item.events.event_name}</p>
                                     </div>
-                                    <p className="text-gray-700 mt-2 text-base">Description: {item.events.description}</p>
+                                    <p className="text-gray-700 mt-2 text-base">Description: {item.events.edescription}</p>
                                     <p className="text-gray-700 mt-2 text-base">Incharge: {item.events.eincharge}</p>
                                     <p className="text-gray-700 mt-2 text-base">Events Date: {item.events.event_date}</p>
-                                    <p className="text-gray-700 mt-2 text-base">Max Teams: 100</p>
+                                    <p className="text-gray-700 mt-2 text-base">Max Teams: 150</p>
                                 </div>
                             </div>
                         ))

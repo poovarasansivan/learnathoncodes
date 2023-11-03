@@ -80,6 +80,19 @@ export const getLinksBasedOnUserRole = (userRole) => {
 
           ],
         },
+        {
+          title: 'Editor',
+          links: [
+            {
+              name: 'Create Questions',
+              icon: <FiBook />,
+            },
+            {
+              name: 'Your Questions',
+              icon: <FiBook />,
+            }
+          ],
+        },
       ];
 
     case '2':

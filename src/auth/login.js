@@ -130,9 +130,9 @@ function Login() {
                         className="absolute hidden bottom-10 right-6 p-6 bg-white bg-opacity-30 backdrop-blur-sm rounded drop-shadow-lg md:block"
                     >
                         <span className="text-white text-xl">
-                            Learnathon is One day Event<br />
-                            You can learn your favourite <br />
-                            Domain
+                        Embrace the joy of learning. Join<br />
+                        us for a Learnathon and unlock<br />
+                         new horizons of knowledge!
                         </span>
                     </div>
                 </div>

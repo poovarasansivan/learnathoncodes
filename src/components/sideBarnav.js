@@ -14,13 +14,13 @@ export default function SideBarnav(props) {
     const { activeMenu } = useStateContext();
     return (
         <div className="flex relative dark:bg-main-dark-bg">
-            <div className="fixed right-4 bottom-4" style={{ zIndex: '1000' }}>
+            {/* <div className="fixed right-4 bottom-4" style={{ zIndex: '1000' }}>
                 <TooltipComponent content="Settings" position="Top">
                     <button className="text-2xl p-3 hover:drop-shadow-xl hover:bg-light-gray text-white" style={{ background: '#3b82f6', borderRadius: '50%' }}>
                         <FiSettings />
                     </button>
                 </TooltipComponent>
-            </div>
+            </div> */}
             {activeMenu ? (
                 <div className='w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white'>
                     <Sidebar />
