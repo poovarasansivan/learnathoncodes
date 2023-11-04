@@ -47,13 +47,8 @@ function Body() {
             });
     }, [categoryId])
     const handleSaveQuestions = () => {
-        console.log('Saving questions...');
-
-        // Get the input from all the text editors.
-        const inputs = topics.map((topic) => topic.scenario);
-      
-        // Save the inputs to the console.
-        inputs.forEach((input) => console.log(input));
+       
+        console.log(topics);
     };
 
     const addNewTopic = () => {
@@ -97,20 +92,7 @@ function Body() {
             return updatedTopics;
         });
     };
-    const [showPasteMessage, setShowPasteMessage] = useState(false);
 
-    const handlePaste = (e, topicIndex) => {
-        if (e.clipboardData.getData('text/plain')) {
-            setShowPasteMessage(true);
-            setTimeout(() => {
-                setShowPasteMessage(false);
-            }, 2000);
-            e.preventDefault();
-        } else {
-            setShowPasteMessage(false);
-        }
-
-    };
     return (
         <>
             <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl ">
@@ -126,11 +108,6 @@ function Body() {
                     </TooltipComponent>
                 </div>
 
-                {showPasteMessage && (
-                    <div className="bg-red-500 text-white p-2 rounded-md absolute top-10 right-10 z-10">
-                        Pasting is not allowed!
-                    </div>
-                )}
                 {topics.map((topic, index) => (
                     <div key={index} className="mb-5">
                         {index !== 0 && <hr className="my-4 border-t border-gray-300" />} {/* Separator line */}
@@ -164,7 +141,7 @@ function Body() {
                             value={topic.scenario}
                             onChange={(e) => handleScenarioChange(index, e.target.value)}
                             placeholder="Enter your Scenario here..."
-                            onPaste={(e) => e.preventDefault(handlePaste)} 
+                            onPaste={(e) => e.preventDefault()} 
                             // onCopy={(e) => e.preventDefault()} 
                             // onCut={(e) => e.preventDefault()} 
                             pasteCleanupSettings={{
