@@ -10,8 +10,13 @@ import Users from "./users"
 import MyEvents from "./myEvents"
 import Allusers from "./allusers"
 import MyEventDetails from "./myeventDetails"
+import AnswerQuestion from "./answerQuestion";
+import MyQuestions from "./myQuestions"
+import TotalQuestions from "./totalQuestions"
 export {
-  
+  TotalQuestions,
+  AnswerQuestion,
+  MyQuestions,
   MyEventDetails,
   MyEvents,
   Users,

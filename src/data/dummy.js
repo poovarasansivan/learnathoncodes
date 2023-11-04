@@ -88,9 +88,18 @@ export const getLinksBasedOnUserRole = (userRole) => {
               icon: <FiBook />,
             },
             {
-              name: 'Your Questions',
+              name: 'Answer Questions',
               icon: <FiBook />,
-            }
+            },
+            {
+              name: 'Total Questions',
+              icon: <FiBook />,
+            },
+            {
+              name: 'My Questions',
+              icon: <FiBook />,
+            },
+            
           ],
         },
       ];

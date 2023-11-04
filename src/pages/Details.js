@@ -21,6 +21,7 @@ function Body() {
         navigate('/login');
     }
     const { categoryId } = useParams();
+    console.log(categoryId)
     const [categoryDetails, setCategoryDetails] = useState([]);
     // const [categoryCount, setcategoryCount] = useState([]);
     const [isAlreadyRegistered, setIsAlreadyRegistered] = useState(false);

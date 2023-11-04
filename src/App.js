@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
-import { Dashboard, Details, Category, Events, TotalUsers, Users, MyEvents, MyEventDetails, Register, Allusers } from './pages'
-import { ViewTeams, AddEvent, RoleLinks, CategoryForm,Question, Editor,AddnewTeams,NotFound } from './components'
+import { Dashboard, Details, Category, Events, TotalUsers, Users, AnswerQuestion, MyEvents, MyEventDetails, Register, Allusers, MyQuestions, TotalQuestions } from './pages'
+import { ViewTeams, AddEvent, RoleLinks, CategoryForm, Question, Editor, AddnewTeams, NotFound } from './components'
 import Auth from './auth/login';
 function App() {
     return (
@@ -30,9 +30,12 @@ function App() {
                 <Route path="/register" element={<Register />} />
                 <Route path="/Links" element={<RoleLinks />} />
                 <Route path="/Users" element={<Allusers />} />
-                <Route path="Text Editor" element={<Editor/>}/>
-                <Route path="Create Questions" element={<Question/>}/>
-                <Route path="*" element={<NotFound/>}/>
+                <Route path="Text Editor/:categoryId" element={<Editor />} />
+                <Route path="Create Questions" element={<Question />} />
+                <Route path="My Questions" element={<MyQuestions />} />
+                <Route path="Total Questions" element={<TotalQuestions />} />
+                <Route path="Answer Questions" element={<AnswerQuestion />} />
+                <Route path="*" element={<NotFound />} />
             </Routes>
             {/* </AuthProvider> */}
         </BrowserRouter>

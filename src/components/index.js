@@ -15,7 +15,11 @@ import Host from "./api";
 import NotFound from "./404page";
 import Editor from "./editor"
 import Question from "./question"
+import MyQuestionTable from "./myQuestionsTable";
+import TotalQuestionsTable from "./totalquestionm";
 export {
+    TotalQuestionsTable,
+    MyQuestionTable,
     Question,
     Editor,
     NotFound,
