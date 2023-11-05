@@ -14,6 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { useParams } from 'react-router-dom';
 
 export default function Editor() {
+   
     return (
         <SideBarnav body={<Body />} />
     );
@@ -22,7 +23,7 @@ export default function Editor() {
 function Body() {
     const { categoryId } = useParams();
     const navigate = useNavigate();
-
+    const editorRef = useRef();
     const id = sessionStorage.getItem("user_id");
     const [categoryName, setcategoryName] = useState([]);
     const [currentTopic, setCurrentTopic] = useState(1);
@@ -37,7 +38,6 @@ function Body() {
         axios.post(`${Host}/GetTopics`, { id: parseInt(categoryId) })
             .then((res) => {
                 let data = res.data;
-                // console.log(data)
                 if (data.success) {
                     setcategoryName(data.data);
                 }
@@ -45,10 +45,15 @@ function Body() {
             .catch((err) => {
                 console.log(err);
             });
-    }, [categoryId])
+    }, [categoryId]);
+
     const handleSaveQuestions = () => {
-       
-        console.log(topics);
+        // Log the updated state without <p> tags
+        const updatedState = topics.map(topic => ({
+            ...topic,
+            scenario: topic.scenario.replace(/<\/?p>/g, ''), // Remove <p> tags
+        }));
+        console.log(updatedState);
     };
 
     const addNewTopic = () => {
@@ -78,20 +83,20 @@ function Body() {
     };
 
     const handleScenarioChange = (index, value) => {
-        setTopics(prevTopics => {
-            const updatedTopics = [...prevTopics];
-            updatedTopics[index].scenario = value;
-            return updatedTopics;
-        });
+        const updatedTopics = [...topics];
+        updatedTopics[index].scenario = value;
+        setTopics(updatedTopics);
     };
 
     const handleQuestionChange = (topicIndex, questionIndex, value) => {
-        setTopics(prevTopics => {
+        setTopics((prevTopics) => {
             const updatedTopics = [...prevTopics];
-            updatedTopics[topicIndex].questions[questionIndex] = value;
+            updatedTopics[topicIndex].questions[questionIndex] = editorRef.current.getAllHtml();
             return updatedTopics;
         });
     };
+    
+   
 
     return (
         <>
@@ -100,7 +105,7 @@ function Body() {
                     <Header title="Text Editor" />
                     <TooltipComponent content="Add New" position="BottomCenter" >
                         <div className="flex items-center gap-2">
-                            <div className="cursor-pointer p-1 hover:bg-light-gray rounded-lg flex items-center">
+                            <div className="cursor-pointer p-1 hover-bg-light-gray rounded-lg flex items-center">
                                 <IoIosAddCircle color="#4ade80" className='w-8 h-6' />
                                 <p className="text-green-400 font-medium text-base" onClick={addNewTopic}>Add New</p>
                             </div>
@@ -114,7 +119,7 @@ function Body() {
                         <div className="flex items-center justify-between mb-2">
                             <h2 className="text-xl font-medium">Topic {topic.id}</h2>
                             {index > 0 && (
-                                <div className="cursor-pointer p-1 hover:bg-light-gray rounded-lg flex items-center" onClick={() => removeTopic(topic.id)}>
+                                <div className="cursor-pointer p-1 hover-bg-light-gray rounded-lg flex items-center" onClick={() => removeTopic(topic.id)}>
                                     <IoIosRemove color="#ef4444" className='w-8 h-6' />
                                     <p className="text-red-400 font-medium text-base">Remove</p>
                                 </div>
@@ -138,14 +143,16 @@ function Body() {
 
                         <p className="text-xl font-medium mt-4">Scenario</p>
                         <RichTextEditorComponent
+                            ref={editorRef}
                             value={topic.scenario}
-                            onChange={(e) => handleScenarioChange(index, e.target.value)}
                             placeholder="Enter your Scenario here..."
-                            onPaste={(e) => e.preventDefault()} 
-                            // onCopy={(e) => e.preventDefault()} 
-                            // onCut={(e) => e.preventDefault()} 
+                            onPaste={(e) => e.preventDefault()}
                             pasteCleanupSettings={{
                                 prompt: false
+                            }}
+                            created={() => {
+                                // Add an event listener to capture changes in the editor
+                                editorRef.current.element.addEventListener("input", () => handleScenarioChange(index, editorRef.current.getHtml()));
                             }}
                         >
                             <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
@@ -167,6 +174,7 @@ function Body() {
                                 </RichTextEditorComponent>
                             </div>
                         ))}
+
                     </div>
                 ))}
 

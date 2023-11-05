@@ -1,142 +1,187 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import { Header } from '../components';
-import MenuItem from '@mui/material/MenuItem';
+import React, { useState, useEffect, useRef } from "react";
+import Header from "../components/header";
+import SideBarnav from "../components/sideBarnav";
+import { useNavigate } from "react-router-dom";
+import { HtmlEditor, Image, Inject, Link, QuickToolbar, RichTextEditorComponent, Toolbar } from '@syncfusion/ej2-react-richtexteditor';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom';
-import SideBarnav from '../components/sideBarnav';
-import axios from 'axios'; // Import Axios for making API calls
+import axios from "axios";
+import Host from "../components/api";
+import { IoIosAddCircle, IoIosRemove } from "react-icons/io";
+import { TooltipComponent } from '@syncfusion/ej2-react-popups';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import { useParams } from 'react-router-dom';
 
-const Teamsize = [
-  {
-    value: '1',
-    label: '1',
-  },
-  // ... (your Teamsize options)
-];
-
-export default function Register() {
-  return <SideBarnav body={<Body />} />;
+export default function Editor() {
+   
+    return (
+        <SideBarnav body={<Body />} />
+    );
 }
 
 function Body() {
-  const [teamSize, setTeamSize] = React.useState('1');
-  const [rollNo, setRollNo] = React.useState(''); // Add state to store selected Roll No
-  const [userData, setUserData] = React.useState({
-    name: '',
-    email: '',
-    phone: '',
-  });
+    const { categoryId } = useParams();
+    const navigate = useNavigate();
+    const editorRef = useRef();
+    const id = sessionStorage.getItem("user_id");
+    const [categoryName, setcategoryName] = useState([]);
+    const [currentTopic, setCurrentTopic] = useState(1);
+    const [topics, setTopics] = useState([{
+        id: 1,
+        category: "",
+        scenario: "",
+        questions: ["", ""]
+    }]);
 
-  const navigate = useNavigate();
+    useEffect(() => {
+        axios.post(`${Host}/GetTopics`, { id: parseInt(categoryId) })
+            .then((res) => {
+                let data = res.data;
+                if (data.success) {
+                    setcategoryName(data.data);
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, [categoryId]);
 
-  const navigateToCategory = () => {
-    navigate('/Category');
-  };
+    const handleSaveQuestions = () => {
+        // Log the updated state without <p> tags
+        const updatedState = topics.map(topic => ({
+            ...topic,
+            scenario: topic.scenario.replace(/<\/?p>/g, ''), // Remove <p> tags
+        }));
+        console.log(updatedState);
+    };
 
-  const handleTeamSizeChange = (event) => {
-    setTeamSize(event.target.value);
-  };
+    const addNewTopic = () => {
+        if (topics.length < 10) {
+            setTopics(prevTopics => [...prevTopics, {
+                id: currentTopic + 1,
+                category: "",
+                scenario: "",
+                questions: ["", ""]
+            }]);
+            setCurrentTopic(prev => prev + 1);
+        }
+    };
 
-  const handleRollNoChange = (event) => {
-    setRollNo(event.target.value);
+    const removeTopic = (id) => {
+        if (topics.length > 1) {
+            setTopics(prevTopics => prevTopics.filter(topic => topic.id !== id));
+        }
+    };
 
-    // Make an API call to fetch user data based on the selected Roll No
-    axios
-      .get(`http://your-api-url/users/${event.target.value}`)
-      .then((response) => {
-        const userData = response.data; // Assuming API response contains user data
-        setUserData(userData);
-      })
-      .catch((error) => {
-        console.error('Error fetching user data:', error);
-      });
-  };
+    const handleCategoryChange = (index, value) => {
+        setTopics(prevTopics => {
+            const updatedTopics = [...prevTopics];
+            updatedTopics[index].category = value;
+            return updatedTopics;
+        });
+    };
 
-  const renderTeamFields = () => {
-    let fields = [];
-    for (let i = 0; i < teamSize; i++) {
-      fields.push(
-        <div key={i} className="mt-5">
-          <TextField
-            required
-            id={`team-member-${i + 1}`}
-            label={`Team Member ${i + 1}`}
-            defaultValue={i === 0 ? userData.name : 'Name'}
-          />
-          <TextField
-            required
-            id={`phone-${i + 1}`}
-            label={`Phone no ${i + 1}`}
-            type="mobile"
-            defaultValue={i === 0 ? userData.phone : '+91xxxxxxxxxx'}
-            autoComplete="off"
-          />
-          {/* ... (other fields) */}
-        </div>
-      );
-    }
-    return fields;
-  };
+    const handleScenarioChange = (index, value) => {
+        const updatedTopics = [...topics];
+        updatedTopics[index].scenario = value;
+        setTopics(updatedTopics);
+    };
 
-  return (
-    <>
-      <div className="m-2 md:m-10 mt-20 p-2 md:p-6 bg-white rounded-3xl">
-        <div className="flex items-center justify-between">
-          <Header title="Register Team" />
-        </div>
-        <Box
-          component="form"
-          sx={{
-            '& .MuiTextField-root': { m: 1, width: '25ch' },
-          }}
-          noValidate
-          autoComplete="off"
-        >
-          <div className="mt-5">
-            <TextField
-              id="outlined"
-              select
-              label="Select Team Size"
-              value={teamSize}
-              onChange={handleTeamSizeChange}
-              helperText="Select Team Size"
-            >
-              {Teamsize.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.label}
-                </MenuItem>
-              ))}
-            </TextField>
+    const handleQuestionChange = (topicIndex, questionIndex, value) => {
+        setTopics((prevTopics) => {
+            const updatedTopics = [...prevTopics];
+            updatedTopics[topicIndex].questions[questionIndex] = editorRef.current.getAllHtml();
+            return updatedTopics;
+        });
+    };
+    
+   
 
-            <TextField
-              required
-              label="Roll No" // Add a field for Roll No
-              value={rollNo}
-              onChange={handleRollNoChange}
-            />
+    return (
+        <>
+            <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl ">
+                <div className="flex items-center justify-between mb-6">
+                    <Header title="Text Editor" />
+                    <TooltipComponent content="Add New" position="BottomCenter" >
+                        <div className="flex items-center gap-2">
+                            <div className="cursor-pointer p-1 hover-bg-light-gray rounded-lg flex items-center">
+                                <IoIosAddCircle color="#4ade80" className='w-8 h-6' />
+                                <p className="text-green-400 font-medium text-base" onClick={addNewTopic}>Add New</p>
+                            </div>
+                        </div>
+                    </TooltipComponent>
+                </div>
 
-            <TextField
-              required
-              label="Team Leader Name"
-              defaultValue="Name"
-            />
-            <TextField
-              required
-              label="Team Leader Mobile"
-              defaultValue="+91xxxxxxxxxx"
-            />
-          </div>
-          {renderTeamFields()}
-        </Box>
-        <Stack spacing={2} direction="row" className="flex justify-center">
-          <Button variant="contained" onClick={navigateToCategory}>
-            Submit
-          </Button>
-        </Stack>
-      </div>
-    </>
-  );
+                {topics.map((topic, index) => (
+                    <div key={index} className="mb-5">
+                        {index !== 0 && <hr className="my-4 border-t border-gray-300" />} {/* Separator line */}
+                        <div className="flex items-center justify-between mb-2">
+                            <h2 className="text-xl font-medium">Topic {topic.id}</h2>
+                            {index > 0 && (
+                                <div className="cursor-pointer p-1 hover-bg-light-gray rounded-lg flex items-center" onClick={() => removeTopic(topic.id)}>
+                                    <IoIosRemove color="#ef4444" className='w-8 h-6' />
+                                    <p className="text-red-400 font-medium text-base">Remove</p>
+                                </div>
+                            )}
+                        </div>
+                        <TextField
+                            id={`category-${index}`}
+                            select
+                            label="Select Topics"
+                            value={topic.category}
+                            onChange={(e) => handleCategoryChange(index, e.target.value)}
+                            helperText="Please select Topics"
+                            className="mt-5 w-60"
+                        >
+                            {categoryName.map((option, optionIndex) => (
+                                <MenuItem key={optionIndex} value={option.topics}>
+                                    {option.topics}
+                                </MenuItem>
+                            ))}
+                        </TextField>
+
+                        <p className="text-xl font-medium mt-4">Scenario</p>
+                        <RichTextEditorComponent
+                            ref={editorRef}
+                            value={topic.scenario}
+                            placeholder="Enter your Scenario here..."
+                            onPaste={(e) => e.preventDefault()}
+                            pasteCleanupSettings={{
+                                prompt: false
+                            }}
+                            created={() => {
+                                // Add an event listener to capture changes in the editor
+                                editorRef.current.element.addEventListener("input", () => handleScenarioChange(index, editorRef.current.getHtml()));
+                            }}
+                        >
+                            <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
+                        </RichTextEditorComponent>
+
+                        {topic.questions.map((question, questionIndex) => (
+                            <div key={questionIndex} className="mt-5">
+                                <label className="block text-xl font-medium mb-2">Scenario Question {questionIndex + 1}</label>
+                                <RichTextEditorComponent
+                                    value={question}
+                                    onChange={(e) => handleQuestionChange(index, questionIndex, e.target.value)}
+                                    placeholder="Enter your Scenario Question here..."
+                                    onPaste={(e) => e.preventDefault()} 
+                                    pasteCleanupSettings={{
+                                        prompt: false
+                                    }}
+                                >
+                                    <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
+                                </RichTextEditorComponent>
+                            </div>
+                        ))}
+
+                    </div>
+                ))}
+
+                <Stack spacing={2} direction="row" className='flex justify-center mt-6'>
+                    <Button variant="contained" onClick={handleSaveQuestions}>Save Questions</Button>
+                </Stack>
+            </div>
+        </>
+    );
 }
