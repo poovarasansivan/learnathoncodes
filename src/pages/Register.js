@@ -36,7 +36,7 @@ function Body() {
     const member2 = user2.id;
     const member3 = user3.id;
 
-    if ((!teamName || !member1) && (member1!==member2&& member1!==member3 && member3!==member2)) {
+    if ((!teamName || !member1) && (member1 !== member2 && member1 !== member3 && member3 !== member2)) {
       setFormError("* All fields are required");
       return;
     }
@@ -49,8 +49,8 @@ function Body() {
       user3: member3,
     })
       .then((response) => {
-        // console.log("Data submitted successfully:", response.data);
-        navigate('/Category');
+        console.log("Data submitted successfully:", response.data);
+        // navigate('/Category');
       })
       .catch((error) => {
         console.error("Error submitting data:", error);

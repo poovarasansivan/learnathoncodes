@@ -23,11 +23,11 @@ const toolbarSettings = {
 };
 
 const insertImageSettings = {
-    saveUrl: 'https://ej2.syncfusion.com/services/api/uploadbox/Save',
+    saveUrl: './src/uploads/save',
     removeUrl: 'https://ej2.syncfusion.com/services/api/uploadbox/Remove'
 };
 function Body() {
-    
+
     const { categoryId } = useParams();
     const navigate = useNavigate();
     const editorRef = useRef();
@@ -44,6 +44,9 @@ function Body() {
 
     const question1Refs = useRef(topics.map(() => React.createRef()));
     const question2Refs = useRef(topics.map(() => React.createRef()));
+
+
+
 
     useEffect(() => {
         axios.post(`${Host}/GetTopics`, { id: parseInt(categoryId) })
@@ -83,8 +86,26 @@ function Body() {
         }));
         console.log(updatedState);
 
-        // Reset topics after saving
-        resetTopics();
+        const dataToSave = updatedState.map(topic => ({
+            category_id: parseInt(categoryId),
+            topics: topic.category,
+            scenario: topic.scenario,
+            question_1: topic.question1,
+            question_2: topic.question2,
+            created_by: id
+        }));
+        console.log("Data to save:", dataToSave);
+
+
+        axios.post(`${Host}/insertQuestion`, dataToSave)
+            .then(response => {
+                console.log("Data inserted successfully", response.data);
+
+                resetTopics();
+            })
+            .catch(error => {
+                console.error("Error inserting data:", error);
+            });
     };
 
     const addNewTopic = () => {
@@ -194,7 +215,7 @@ function Body() {
                             created={() => {
                                 editorRef.current.element.addEventListener("input", () => handleScenarioChange(index, editorRef.current.getHtml()));
                             }}
-                            
+
                         >
                             <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
                         </RichTextEditorComponent>

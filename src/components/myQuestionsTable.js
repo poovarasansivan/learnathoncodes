@@ -11,33 +11,7 @@ import Button from '@mui/material/Button';
 import CategoryForm from '../components/categoryForm';
 import Host from '../components/api';
 import { useNavigate } from 'react-router-dom';
-
-const data=[
-    {
-        Category:"C Programming",
-        Questions:"What is C programming?"
-    },
-    {
-        Category:"C Programming",
-        Questions:"What is object in C programming?"
-    },
-    { 
-        Category:"C Programming",
-        Questions:"What is Class in C programming?"
-    },
-    {
-        Category:"C Programming",
-        Questions:"What is C programming?"
-    },
-    {
-        Category:"C Programming",
-        Questions:"What is object in C programming?"
-    },
-    { 
-        Category:"C Programming",
-        Questions:"What is Class in C programming?"
-    }
-]
+import axios from 'axios';
 
 export default function MyQuestionTable() {
     const navigate = useNavigate();
@@ -45,28 +19,23 @@ export default function MyQuestionTable() {
     if (id === null || id === undefined) {
         navigate('/login');
     }
-    // const [data, setData] = useState([]);
-    const [iscategoryFormOpen, setcategoryFormOpen] = useState(false);
+    const [data, setData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const rowsPerPage = 7;
 
-    // useEffect(() => {
-    //     fetch(`${Host}/GetEVCategory`)
-    //         .then(response => response.json())
-    //         .then(data => setData(data));
-    // }, []);
-
-    const handlecategoryFormClick = () => {
-        setcategoryFormOpen(true);
-    }
-
-    const handleClosecategoryForm = () => {
-        setcategoryFormOpen(false);
-    }
-
-    const indexOfLastRow = currentPage * rowsPerPage;
-    const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-    const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);
+    useEffect(() => {
+        axios({
+            url: `${Host}/GetMyQuestion`,
+            method: "POST",
+            data: { created_by: sessionStorage.getItem('user_id') }
+        })
+            .then((res1) => {
+                setData(res1.data.events);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
 
     const handleNextPage = () => {
         setCurrentPage(currentPage + 1);
@@ -76,20 +45,33 @@ export default function MyQuestionTable() {
         setCurrentPage(currentPage - 1);
     }
 
+    const handleReadMore = (index) => {
+        setExpandedRows([...expandedRows, index]);
+    };
+
+    const [expandedRows, setExpandedRows] = useState([]);
+
+    const indexOfLastRow = currentPage * rowsPerPage;
+    const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+    const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);
+
     return (
         <>
             <TableContainer component={Paper}>
                 <Table aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>S No</TableCell>
+                            <TableCell>SNo</TableCell>
                             <TableCell align="left">Category </TableCell>
-                            <TableCell align="left">Question</TableCell>
+                            <TableCell align="left">Topics </TableCell>
+                            <TableCell align="left">Scenario</TableCell>
+                            <TableCell align="left">Question 1</TableCell>
+                            <TableCell align="left">Question 2</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {currentRows.map((row, index) => {
-                            const sNo = (currentPage - 1) * rowsPerPage + index + 1; // Calculate continuous S No
+                            const sNo = (currentPage - 1) * rowsPerPage + index + 1;
 
                             return (
                                 <TableRow
@@ -99,13 +81,39 @@ export default function MyQuestionTable() {
                                     <TableCell component="th" scope="row">
                                         {sNo}
                                     </TableCell>
-                                    <TableCell align="left">{row.Category}</TableCell>
-                                    <TableCell align="left">{row.Questions}</TableCell>
-                                    {/* <TableCell align="left">
-                                        <Stack spacing={2} direction="row">
-                                            <Button variant='outlined' color="success" onClick={handlecategoryFormClick}>View</Button>
-                                        </Stack>
-                                    </TableCell> */}
+                                    <TableCell align="left" className="max-h-40 overflow-hidden">
+                                        {row.category_name}
+                                    </TableCell>
+                                    <TableCell align="left" className="max-h-40 overflow-hidden">
+                                        {row.topics}
+                                    </TableCell>
+                                    <TableCell align="left" className="max-h-40 overflow-hidden">
+                                        {row.scenario}
+                                    </TableCell>
+                                    <TableCell align="left" className="max-h-40 overflow-hidden">
+                                        {expandedRows.includes(index) ? (
+                                            row.question_1
+                                        ) : (
+                                            <>
+                                                {row.question_1.length > 50 ? `${row.question_1.substring(0, 50)}...` : row.question_1}
+                                                {row.question_1.length > 50 && (
+                                                    <button onClick={() => handleReadMore(index)} className="text-blue-500">Read More</button>
+                                                )}
+                                            </>
+                                        )}
+                                    </TableCell>
+                                    <TableCell align="left" className="max-h-40 overflow-hidden">
+                                        {expandedRows.includes(index) ? (
+                                            row.question_2
+                                        ) : (
+                                            <>
+                                                {row.question_2.length > 50 ? `${row.question_2.substring(0, 50)}...` : row.question_2}
+                                                {row.question_2.length > 50 && (
+                                                    <button onClick={() => handleReadMore(index)} className="text-blue-500">Read More</button>
+                                                )}
+                                            </>
+                                        )}
+                                    </TableCell>
                                 </TableRow>
                             );
                         })}
@@ -118,7 +126,6 @@ export default function MyQuestionTable() {
                     {data.length > currentPage * rowsPerPage && <Button variant='outlined' color="primary" onClick={handleNextPage}>Next Page</Button>}
                 </Stack>
             </div>
-            <CategoryForm open={iscategoryFormOpen} handleClose={handleClosecategoryForm} />
         </>
     );
 }

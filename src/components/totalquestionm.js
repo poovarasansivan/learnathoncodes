@@ -8,41 +8,12 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import { useNavigate } from 'react-router-dom';
 import DownloadIcon from '@mui/icons-material/CloudDownload';
-
-const data = [
-    {
-        Category: "C Programming",
-        Questions: "What is C programming?",
-        Topic: "OOPS",
-        CreatorName: "POOVARASAN S",
-    },
-    {
-        Category: "DBMS",
-        Questions: "What is object in C programming?",
-        Topic: "OBJECT",
-        CreatorName: "POOVARASAN S",
-    },
-    {
-        Category: "C Programming",
-        Questions: "What is Class in C programming?",
-        Topic: "CLASS",
-        CreatorName: "POOVARASAN S",
-    },
-    {
-        Category: "C Programming",
-        Questions: "What is C programming?",
-        Topic: "CONTROL STATEMENTS",
-        CreatorName: "POOVARASAN S",
-    },
-    {
-        Category: "C Programming",
-        Questions: "What is object in C programming?",
-        Topic: "LOOPS",
-        CreatorName: "POOVARASAN S",
-    }
-]
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import Host from './api';
+import axios from "axios";
+import { IoIosArrowDown } from "react-icons/io";
 
 export default function MyQuestionTable() {
     const navigate = useNavigate();
@@ -50,8 +21,27 @@ export default function MyQuestionTable() {
     if (id === null || id === undefined) {
         navigate('/login');
     }
+    const [data, setData] = useState([])
     const [currentPage, setCurrentPage] = useState(1);
     const rowsPerPage = 7;
+    const [loading, setLoading] = useState(true);
+    const [showDetails, setShowDetails] = useState({});
+
+    console.log(data)
+    useEffect(() => {
+        axios({
+            url: `${Host}/TotalQuestion`,
+            method: "GET"
+        })
+            .then((res) => {
+                setData(res.data.events);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.log(err);
+                setLoading(false);
+            });
+    }, []);
 
     const indexOfLastRow = currentPage * rowsPerPage;
     const indexOfFirstRow = indexOfLastRow - rowsPerPage;
@@ -64,16 +54,20 @@ export default function MyQuestionTable() {
     const handlePrevPage = () => {
         setCurrentPage(currentPage - 1);
     }
-
     function generateCSV() {
-        const csvContent = "Category,Questions,Topic,CreatorName\n" +
-            data.map(row => `${row.Category},${row.Questions},${row.Topic},${row.CreatorName}`).join('\n');
-
+        const csvContent = "Category,Topic,Scenario,Question 1,Question 2,CreatorName\n" +
+            data.map(row => `"${row.category_name}","${row.topics}","${row.scenario.replace(/"/g, '""')}","${row.question_1.replace(/"/g, '""')}","${row.question_2.replace(/"/g, '""')}","${row.name}"`).join('\n');
+    
         const blob = new Blob([csvContent], { type: 'text/csv' });
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
         link.download = 'questions.csv';
         link.click();
+    }
+    
+
+    if (loading) {
+        return <div>Loading...</div>;
     }
 
     return (
@@ -86,32 +80,51 @@ export default function MyQuestionTable() {
                 <Table aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>S No</TableCell>
+                            <TableCell>SNo</TableCell>
                             <TableCell align="left">Category </TableCell>
                             <TableCell align="left">Topic</TableCell>
-                            <TableCell align="left">Question</TableCell>
-                            <TableCell align="left">Creator Name</TableCell>
-
+                            <TableCell align="left">Scenario</TableCell>
+                            <TableCell align="left">Action</TableCell>
                         </TableRow>
-
                     </TableHead>
                     <TableBody>
                         {currentRows.map((row, index) => {
                             const sNo = (currentPage - 1) * rowsPerPage + index + 1;
 
+                            const toggleDetails = () => {
+                                setShowDetails(prevState => ({
+                                    ...prevState,
+                                    [index]: !prevState[index]
+                                }));
+                            };
+
                             return (
-                                <TableRow
-                                    key={index}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                    <TableCell component="th" scope="row">
-                                        {sNo}
-                                    </TableCell>
-                                    <TableCell align="left">{row.Category}</TableCell>
-                                    <TableCell align="left">{row.Topic}</TableCell>
-                                    <TableCell align="left">{row.Questions}</TableCell>
-                                    <TableCell align="left">{row.CreatorName}</TableCell>
-                                </TableRow>
+                                <React.Fragment key={index}>
+                                    <TableRow
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell component="th" scope="row">
+                                            {sNo}
+                                        </TableCell>
+                                        <TableCell align="left">{row.category_name}</TableCell>
+                                        <TableCell align="left">{row.topics}</TableCell>
+                                        <TableCell align="left">{row.scenario}</TableCell>
+                                        <TableCell align="left">
+                                            <button onClick={toggleDetails} className="text-blue-500 hover:bg-slate-100 rounded-full"><IoIosArrowDown className='w-5 h-5' /></button>
+                                        </TableCell>
+                                    </TableRow>
+                                    {showDetails[index] && (
+                                        <TableRow>
+                                            <TableCell colSpan={5}>
+                                                <div className="p-4 bg-gray-100">
+                                                    <p className=''>Question 1:  {row.question_1}</p>
+                                                    <p>Question 2:  {row.question_2}</p>
+                                                    <p>Creator Name:  {row.name}</p>
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    )}
+                                </React.Fragment>
                             );
                         })}
                     </TableBody>

@@ -22,7 +22,7 @@ function Allusers() {
     const [currentPage, setCurrentPage] = useState(1);
     const [isViewTeamsOpen, setIsViewTeamsOpen] = useState(false);
     const [selectedTeamId, setSelectedTeamId] = useState(null);
-   console.log(data)
+//    console.log(data)
     const rowsPerPage = 5;
 
     useEffect(() => {
