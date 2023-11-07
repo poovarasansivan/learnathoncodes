@@ -18,14 +18,8 @@ export default function Editor() {
         <SideBarnav body={<Body />} />
     );
 }
-const toolbarSettings = {
-    items: ['Image']
-};
 
-const insertImageSettings = {
-    saveUrl: './src/uploads/save',
-    removeUrl: 'https://ej2.syncfusion.com/services/api/uploadbox/Remove'
-};
+
 function Body() {
 
     const { categoryId } = useParams();
@@ -123,7 +117,6 @@ function Body() {
             setTopics(prevTopics => [...prevTopics, newTopic]);
             setCurrentTopic(newTopicId);
 
-            // Add new refs for question1 and question2
             question1Refs.current.push(React.createRef());
             question2Refs.current.push(React.createRef());
         }
@@ -133,7 +126,6 @@ function Body() {
         if (topics.length > 1) {
             setTopics(prevTopics => prevTopics.filter(topic => topic.id !== id));
 
-            // Remove the corresponding refs for question1 and question2
             question1Refs.current.splice(id - 1, 1);
             question2Refs.current.splice(id - 1, 1);
         }
@@ -212,11 +204,14 @@ function Body() {
                             pasteCleanupSettings={{
                                 prompt: false
                             }}
+
+
                             created={() => {
                                 editorRef.current.element.addEventListener("input", () => handleScenarioChange(index, editorRef.current.getHtml()));
                             }}
 
                         >
+
                             <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
                         </RichTextEditorComponent>
 

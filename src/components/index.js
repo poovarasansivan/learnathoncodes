@@ -18,7 +18,9 @@ import Question from "./question"
 import MyQuestionTable from "./myQuestionsTable";
 import TotalQuestionsTable from "./totalquestionm";
 import RubricsTable from "./rubrics";
+import AnswerEditor from "./answerQuestion";
 export {
+    AnswerEditor,
     RubricsTable,
     TotalQuestionsTable,
     MyQuestionTable,

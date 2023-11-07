@@ -30,7 +30,6 @@ function Login() {
             },
             method: "POST"
         }).then((res1) => {
-            // console.log(res1);
             let data = res1.data;
             if (data.success) {
                 sessionStorage.setItem('email', data.user.email);
