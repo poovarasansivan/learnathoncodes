@@ -1,0 +1,69 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
+
+/* Reset default styles */
+body {
+  box-sizing: border-box;
+  color: #000000;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 100px;
+}
+
+/* Table styles */
+table {
+  border-collapse: collapse;
+  width: 100%;
+  justify-content: center;
+  border-radius: 30px; /* Add rounded edges here */
+  overflow: hidden; /* Ensure the border-radius is applied */
+}
+
+/* Table header styles */
+thead tr th {
+  font-size: 18px;
+  padding: 15px;
+  border: 1px solid #eeeeee;
+  text-align: center;
+  background-color: rgb(118, 151, 191);
+  color: #fff;
+}
+
+/* Table body cell styles */
+tbody tr td {
+  border: 1px solid #eeeeee;
+  text-align: center;
+  padding: 10px;
+}
+
+/* Alternating row colors */
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #fff;
+}
+
+/* Radio button styles */
+input[type="radio"] {
+  width: 20px;
+  height: 20px;
+}
+
+/* Remove default radio button styles */
+input[type="radio"]::-webkit-input-placeholder {
+  display: none;
+}
+
+input[type="radio"]::-moz-placeholder {
+  display: none;
+}
+
+input[type="radio"]:-ms-input-placeholder {
+  display: none;
+}
+
+input[type="radio"]:-moz-placeholder {
+  display: none;
+}

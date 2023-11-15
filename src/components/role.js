@@ -22,7 +22,7 @@ export const RoleLinks = () => {
                 console.log(err);
             });
     }, []);
-    console.log(userRole)
+    // console.log(userRole)
     switch (userRole) {
         case '1':
             return [

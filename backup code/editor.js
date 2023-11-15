@@ -29,7 +29,7 @@ function Body() {
     const [currentTopic, setCurrentTopic] = useState(1);
     const [saveButtonActive, setSaveButtonActive] = useState(true);
     const [topics, setTopics] = useState([{
-        id: 0,
+        id: 1,
         category: "",
         scenario: "",
         question1: "",
@@ -41,12 +41,12 @@ function Body() {
     }]);
 
     const question1Refs = useRef(topics.map(() => React.createRef()));
+    console.log(question1Refs)
     const question_1_keyRefs = useRef(topics.map(() => React.createRef()));
     const question2Refs = useRef(topics.map(() => React.createRef()));
     const question_2_keyRefs = useRef(topics.map(() => React.createRef()));
     const question3Refs = useRef(topics.map(() => React.createRef()));
     const question_3_keyRefs = useRef(topics.map(() => React.createRef()));
-    const [errorMessage, setErrorMessage] = useState(""); // Added error message state
 
     var user_id = sessionStorage.getItem("user_id")
     if (user_id === null || user_id === undefined) {
@@ -67,7 +67,7 @@ function Body() {
 
     const resetTopics = () => {
         const initialTopics = [{
-            id: 0,
+            id: 1,
             category: "",
             scenario: "",
             question1: "",
@@ -117,7 +117,7 @@ function Body() {
 
     const handleSaveQuestions = () => {
         if (saveButtonActive) {
-
+            console.log(topics)
             const updatedState = topics.map(topic => ({
                 ...topic,
                 scenario: topic.scenario,
@@ -128,7 +128,7 @@ function Body() {
                 question3: topic.question3,
                 question_3_key: topic.question_3_key, // Corrected field name
             }));
-            // console.log(updatedState);
+            console.log(updatedState);
 
             const dataToSave = updatedState.map(topic => ({
                 category_id: parseInt(categoryId),
@@ -142,29 +142,16 @@ function Body() {
                 question_3_key: topic.question_3_key, // Corrected field name
                 created_by: id
             }));
+            console.log("Data to save:", dataToSave);
 
-            var status = 1
-
-            updatedState.forEach(element => {
-                if (element.category == 0 || element.category == " ") {
-                    status = 0
-                    return
-                }
-            });
-
-            if (status == 1) {
-                // console.log("Data to save:", dataToSave);
-
-                axios.post(`${Host}/insertQuestion`, dataToSave)
-                    .then(response => {
-                        // console.log("Data inserted successfully", response.data);
-                        resetTopics();
-                    })
-                    .catch(error => {
-                        console.error("Error inserting data:", error);
-                    });
-            }
-
+            axios.post(`${Host}/insertQuestion`, dataToSave)
+                .then(response => {
+                    console.log("Data inserted successfully", response.data);
+                    resetTopics();
+                })
+                .catch(error => {
+                    console.error("Error inserting data:", error);
+                });
         }
         else {
             console.log("time over")
@@ -224,15 +211,18 @@ function Body() {
 
     const handleScenarioChange = (index, value) => {
         const updatedTopics = [...topics];
+        console.log(value)
         updatedTopics[index].scenario = value;
         setTopics(updatedTopics);
     };
 
     const handleQuestionChange = (topicIndex, value, fieldName) => {
+        console.log(value)
         const updatedTopics = [...topics];
         updatedTopics[topicIndex][fieldName] = value;
         setTopics(updatedTopics);
     };
+
 
 
 
@@ -309,23 +299,23 @@ function Body() {
                         <RichTextEditorComponent
                             ref={question1Refs.current[index]}
                             value={topic.question1}
-                            onChangehange={(e) => handleQuestionChange(index, e, 'question1')}
+                            change={(e) => handleQuestionChange(index, e.target.value, 'question1')}
                             placeholder="Enter your Scenario1 here..."
                             onPaste={(e) => e.preventDefault()}
                             insertImageSettings={{
+                                display: 'inline',
                                 saveUrl: `${Host}/uploadImage`,
                                 path: `${Host}/serveImage/`,
                             }}
                             pasteCleanupSettings={{
                                 prompt: false
                             }}
-                            created={() => {
-                                question1Refs.current[index].current.element.addEventListener("input", () => handleQuestionChange(index, question1Refs.current[index].current.getHtml(), 'question1'));
-                            }}
+                            // created={() => {
+                            //     question1Refs.current[index].current.element.addEventListener("input", () => handleQuestionChange(index, question1Refs.current[index].current.getHtml(), 'question1'));
+                            // }}
                         >
                             <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
                         </RichTextEditorComponent>
-
                         <p className="text-xl font-medium mt-4">Question 1 Key</p>
                         <RichTextEditorComponent
                             ref={question_1_keyRefs.current[index]}
@@ -353,7 +343,7 @@ function Body() {
                             ref={question2Refs.current[index]}
                             value={topic.question2}
                             onChange={(e) => handleQuestionChange(index, e.target.value, 'question2')}
-                            placeholder="Enter your Scenario2  here..."
+                            placeholder="Enter your Scenario2 here..."
                             onPaste={(e) => e.preventDefault()}
                             insertImageSettings={{
                                 // allowedTypes: ['.jpeg', '.jpg', '.png'],
@@ -375,7 +365,7 @@ function Body() {
                             ref={question_2_keyRefs.current[index]}
                             value={topic.question_2_key}
                             onChange={(e) => handleQuestionChange(index, e.target.value, 'question1')}
-                            placeholder="Enter your Scenario2 here..."
+                            placeholder="Enter your Scenario1 here..."
                             onPaste={(e) => e.preventDefault()}
                             insertImageSettings={{
                                 // allowedTypes: ['.jpeg', '.jpg', '.png'],
@@ -397,10 +387,9 @@ function Body() {
                             ref={question3Refs.current[index]}
                             value={topic.question3}
                             onChange={(e) => handleQuestionChange(index, e.target.value, 'question3')}
-                            placeholder="Enter your Scenario3 here..."
+                            placeholder="Enter your Scenario2 here..."
                             onPaste={(e) => e.preventDefault()}
                             insertImageSettings={{
-                                // allowedTypes: ['.jpeg', '.jpg', '.png'],
                                 display: 'inline',
                                 saveUrl: `${Host}/uploadImage`,
                                 path: `${Host}/serveImage/`,
@@ -419,10 +408,9 @@ function Body() {
                             ref={question_3_keyRefs.current[index]}
                             value={topic.question_3_key}
                             onChange={(e) => handleQuestionChange(index, e.target.value, 'question1')}
-                            placeholder="Enter your Scenario3 here..."
+                            placeholder="Enter your Scenario1 here..."
                             onPaste={(e) => e.preventDefault()}
                             insertImageSettings={{
-                                // allowedTypes: ['.jpeg', '.jpg', '.png'],
                                 display: 'inline',
                                 saveUrl: `${Host}/uploadImage`,
                                 path: `${Host}/serveImage/`,

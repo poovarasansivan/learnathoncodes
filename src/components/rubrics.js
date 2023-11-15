@@ -1,169 +1,73 @@
-import React, { useState } from 'react';
-import 'tailwindcss/tailwind.css'; // Import Tailwind CSS
-
-const data = [
-  {
-    id: '1',
-    question: 'Write a function that takes an array of integers as input and returns the sum of all even numbers in the array.',
-    easy: false,
-    medium: false,
-    hard: false,
-  },
-  {
-    id: '1',
-    question: 'Write a function that takes an array of integers as input and returns the sum of all even numbers in the array.',
-    easy: false,
-    medium: false,
-    hard: false,
-  },
-  {
-    id: '1',
-    question: 'Write a function that takes an array of integers as input and returns the sum of all even numbers in the array.',
-    easy: false,
-    medium: false,
-    hard: false,
-  },
-  {
-    id: '1',
-    question: 'Write a function that takes an array of integers as input and returns the sum of all even numbers in the array.',
-    easy: false,
-    medium: false,
-    hard: false,
-  },
-  {
-    id: '1',
-    question: 'Write a function that takes an array of integers as input and returns the sum of all even numbers in the array.',
-    easy: false,
-    medium: false,
-    hard: false,
-  },
-  {
-    id: '1',
-    question: 'Write a function that takes an array of integers as input and returns the sum of all even numbers in the array.',
-    easy: false,
-    medium: false,
-    hard: false,
-  },
-  {
-    id: '1',
-    question: 'Write a function that takes an array of integers as input and returns the sum of all even numbers in the array.',
-    easy: false,
-    medium: false,
-    hard: false,
-  },
-  {
-    id: '1',
-    question: 'Write a function that takes an array of integers as input and returns the sum of all even numbers in the array.',
-    easy: false,
-    medium: false,
-    hard: false,
-  },
-  {
-    id: '1',
-    question: 'Write a function that takes an array of integers as input and returns the sum of all even numbers in the array.',
-    easy: false,
-    medium: false,
-    hard: false,
-  },
-  {
-    id: '1',
-    question: 'Write a function that takes an array of integers as input and returns the sum of all even numbers in the array.',
-    easy: false,
-    medium: false,
-    hard: false,
-  }, {
-    id: '1',
-    question: 'Write a function that takes an array of integers as input and returns the sum of all even numbers in the array.',
-    easy: false,
-    medium: false,
-    hard: false,
-  },
-  {
-    id: '1',
-    question: 'Write a function that takes an array of integers as input and returns the sum of all even numbers in the array.',
-    easy: false,
-    medium: false,
-    hard: false,
-  },
-  // Add more data as needed
-];
+import React, { useEffect, useState } from 'react';
+import axios from "axios";
+import Host from "./api";
 
 const RubricsTable = () => {
-  const [rubricData, setRubricData] = useState(data);
-  const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 7;
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    axios({
+      url: `${Host}/rubrics/getAll`,
+      method: "GET"
+    })
+      .then((res) => {
+        console.log(res)
+        setData(res.data.data); // Assuming that res.data.data contains the rubrics array
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
-  const toggleCheckbox = (id, rubric) => {
-    const updatedData = rubricData.map((item) => {
-      if (item.id === id) {
-        item[rubric] = !item[rubric];
+  const handleRadioChange = (criteria_id, rubrics_id) => {
+    const updatedData = data.map(item => {
+      if (item.criteria_id === criteria_id) {
+        return {
+          ...item,
+          selected: rubrics_id
+        };
       }
       return item;
     });
 
-    setRubricData(updatedData);
+    setData(updatedData);
   };
 
-  const indexOfLastRow = currentPage * rowsPerPage;
-  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = rubricData.slice(indexOfFirstRow, indexOfLastRow);
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
   return (
-    <div className="container mx-auto px-4">
-      <div className="overflow-x-auto">
-        <table className="border-collapse w-full rounded-lg overflow-hidden">
-          <thead className="bg-gray-200">
-            <tr>
-              <th className="py-2 px-4 border">S.No</th>
-              <th className="py-2 px-4 border">Question</th>
-              <th className="py-1 px-4 border text-center">Easy</th>
-              <th className="py-2 px-4 border">Medium</th>
-              <th className="py-2 px-4 border">Hard</th>
+    <div className="overflow-x-auto">
+      <table className="min-w-full bg-white border border-gray-300">
+        <thead className="bg-gray-200">
+          <tr>
+            <th className="py-2 px-4 border">S.No</th>
+            <th className="py-2 px-4 border">Criteria</th>
+            <th className="py-2 px-4 border">Rubrics 1</th>
+            <th className="py-2 px-4 border">Rubrics 2</th>
+            <th className="py-2 px-4 border">Rubrics 3</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item, index) => (
+            <tr key={index}>
+              <td className="py-2 px-4 border">{index + 1}</td>
+              <td className="py-2 px-4 border">{item.criteria_name}</td>
+              {item.rubrics.map((rubric) => (
+                <td className="py-2 px-4 border" key={rubric.rubrics_id + 1 }>
+                  <div>
+                    <input
+                      type="radio"
+                      name={`rubric-${item.criteria_id}`}
+                      value={rubric.rubrics_id}
+                      checked={item.selected === rubric.rubrics_id}
+                      onChange={() => handleRadioChange(item.criteria_id, rubric.rubrics_id)}
+                      style={{ marginRight: '8px' }}
+                    />
+                    {rubric.rubrics_name}
+                  </div>
+                </td>
+              ))}
             </tr>
-          </thead>
-          <tbody>
-            {currentRows.map(({ id, question, easy, medium, hard }, index) => (
-              <tr key={id}>
-                <td className="py-2 px-4 border">{index + 1}</td>
-                <td className="py-2 px-4 border">{question}</td>
-                <td className="py-2 px-4 border">
-                  <input
-                    type="checkbox"
-                    checked={easy}
-                    onChange={() => toggleCheckbox(id, 'easy')}
-                    className="cursor-pointer"
-                  />
-                </td>
-                <td className="py-2 px-4 border">
-                  <input
-                    type="checkbox"
-                    checked={medium}
-                    onChange={() => toggleCheckbox(id, 'medium')}
-                    className="cursor-pointer"
-                  />
-                </td>
-                <td className="py-2 px-4 border">
-                  <input
-                    type="checkbox"
-                    checked={hard}
-                    onChange={() => toggleCheckbox(id, 'hard')}
-                    className="cursor-pointer"
-                  />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="flex justify-center mt-4">
-        {Array.from({ length: Math.ceil(rubricData.length / rowsPerPage) }, (_, i) => (
-          <button key={i} onClick={() => paginate(i + 1)} className="mx-1 px-4 py-2 border rounded-full">
-            {i + 1}
-          </button>
-        ))}
-      </div>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

@@ -8,34 +8,40 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import CategoryForm from '../components/categoryForm';
-import Host from '../components/api';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import Host from './api';
+import axios from "axios";
+import { IoIosArrowDown } from "react-icons/io";
+import DOMPurify from 'dompurify';
 
 export default function MyQuestionTable() {
-    const navigate = useNavigate();
-    var id = sessionStorage.getItem("user_id")
-    if (id === null || id === undefined) {
-        navigate('/login');
-    }
     const [data, setData] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const rowsPerPage = 7;
+    const [expandedRow, setExpandedRow] = useState(null);
+    const itemsPerPage = 7;
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         axios({
             url: `${Host}/GetMyQuestion`,
             method: "POST",
-            data: { created_by: sessionStorage.getItem('user_id') }
+            data: {
+                created_by: sessionStorage.getItem("user_id")
+            }
         })
-            .then((res1) => {
-                setData(res1.data.events);
+            .then((res) => {
+                setData(res.data.events);
+                setLoading(false);
+
             })
             .catch((err) => {
                 console.log(err);
+                setLoading(false);
             });
     }, []);
+
+    const handleExpandRow = (index) => {
+        setExpandedRow(index === expandedRow ? null : index);
+    }
 
     const handleNextPage = () => {
         setCurrentPage(currentPage + 1);
@@ -45,15 +51,17 @@ export default function MyQuestionTable() {
         setCurrentPage(currentPage - 1);
     }
 
-    const handleReadMore = (index) => {
-        setExpandedRows([...expandedRows, index]);
-    };
+    if (loading) {
+        return <div className='mt-5'>Loading...</div>;
+    }
 
-    const [expandedRows, setExpandedRows] = useState([]);
+    if (!data || data.length === 0) {
+        return <div className='mt-5'>No questions has been created by you..</div>;
+    }
 
-    const indexOfLastRow = currentPage * rowsPerPage;
-    const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-    const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
     return (
         <>
@@ -62,68 +70,56 @@ export default function MyQuestionTable() {
                     <TableHead>
                         <TableRow>
                             <TableCell>SNo</TableCell>
-                            <TableCell align="left">Category </TableCell>
-                            <TableCell align="left">Topics </TableCell>
-                            <TableCell align="left">Scenario</TableCell>
-                            <TableCell align="left">Question 1</TableCell>
-                            <TableCell align="left">Question 2</TableCell>
+                            <TableCell>Category</TableCell>
+                            <TableCell>Topics</TableCell>
+                            <TableCell>Scenario</TableCell>
+                            <TableCell>Action</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {currentRows.map((row, index) => {
-                            const sNo = (currentPage - 1) * rowsPerPage + index + 1;
-
-                            return (
-                                <TableRow
-                                    key={index}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                    <TableCell component="th" scope="row">
-                                        {sNo}
-                                    </TableCell>
-                                    <TableCell align="left" className="max-h-40 overflow-hidden">
-                                        {row.category_name}
-                                    </TableCell>
-                                    <TableCell align="left" className="max-h-40 overflow-hidden">
-                                        {row.topics}
-                                    </TableCell>
-                                    <TableCell align="left" className="max-h-40 overflow-hidden">
-                                        {row.scenario}
-                                    </TableCell>
-                                    <TableCell align="left" className="max-h-40 overflow-hidden">
-                                        {expandedRows.includes(index) ? (
-                                            row.question_1
-                                        ) : (
-                                            <>
-                                                {row.question_1.length > 50 ? `${row.question_1.substring(0, 50)}...` : row.question_1}
-                                                {row.question_1.length > 50 && (
-                                                    <button onClick={() => handleReadMore(index)} className="text-blue-500">Read More</button>
-                                                )}
-                                            </>
-                                        )}
-                                    </TableCell>
-                                    <TableCell align="left" className="max-h-40 overflow-hidden">
-                                        {expandedRows.includes(index) ? (
-                                            row.question_2
-                                        ) : (
-                                            <>
-                                                {row.question_2.length > 50 ? `${row.question_2.substring(0, 50)}...` : row.question_2}
-                                                {row.question_2.length > 50 && (
-                                                    <button onClick={() => handleReadMore(index)} className="text-blue-500">Read More</button>
-                                                )}
-                                            </>
-                                        )}
+                        {currentItems.map((row, index) => (
+                            <React.Fragment key={index}>
+                                <TableRow>
+                                    <TableCell>{indexOfFirstItem + index + 1}</TableCell>
+                                    <TableCell>{row.category_name}</TableCell>
+                                    <TableCell>{row.topics}</TableCell>
+                                    <TableCell>{<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(row.scenario) }} />}</TableCell>
+                                    <TableCell>
+                                        <button onClick={() => handleExpandRow(index)}>
+                                            <IoIosArrowDown />
+                                        </button>
                                     </TableCell>
                                 </TableRow>
-                            );
-                        })}
+                                {expandedRow === index && (
+                                    <TableRow>
+                                        <TableCell colSpan={5}>
+                                            <div className="p-4 bg-gray-100">
+                                                <div className='mb-2'>
+                                                    <p>Question 1:</p>
+                                                    <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(row.question_1) }} />
+                                                </div>
+                                                <div className='mb-2'>
+                                                    <p>Question 2:</p>
+                                                    <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(row.question_2) }} />
+                                                </div>
+                                                <div className='mb-2'>
+                                                    <p>Question 3:</p>
+                                                    <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(row.question_3) }} />
+
+                                                </div>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </React.Fragment>
+                        ))}
                     </TableBody>
                 </Table>
             </TableContainer>
             <div className='flex justify-end mt-5'>
                 <Stack spacing={2} direction="row">
                     {currentPage > 1 && <Button variant='outlined' color="primary" onClick={handlePrevPage}>Previous Page</Button>}
-                    {data.length > currentPage * rowsPerPage && <Button variant='outlined' color="primary" onClick={handleNextPage}>Next Page</Button>}
+                    {data.length > currentPage * itemsPerPage && <Button variant='outlined' color="primary" onClick={handleNextPage}>Next Page</Button>}
                 </Stack>
             </div>
         </>

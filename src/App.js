@@ -34,7 +34,7 @@ function App() {
                 <Route path="Create Questions" element={<Question />} />
                 <Route path="My Questions" element={<MyQuestions />} />
                 <Route path="Total Questions" element={<TotalQuestions />} />
-                <Route path="Answer Questions" element={<AnswerQuestion />} />
+                <Route path="Peer Evalution" element={<AnswerQuestion />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
             {/* </AuthProvider> */}

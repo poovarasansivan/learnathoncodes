@@ -94,7 +94,7 @@ const AddnewTeams = ({ open, handleClose }) => {
     const navigate = useNavigate();
     var id = sessionStorage.getItem("user_id")
     if (id === null || id === undefined) {
-      navigate('/login');
+        navigate('/login');
     }
     const navigateToEvents = () => {
         navigate('/Events');

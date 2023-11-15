@@ -5,6 +5,8 @@ import { IoMdContacts } from 'react-icons/io';
 import { GoDotFill } from 'react-icons/go';
 import { RiContactsLine } from 'react-icons/ri';
 import { MdOutlineSupervisorAccount } from 'react-icons/md';
+import { FcSurvey } from "react-icons/fc";
+import { CiEdit, CiGrid2V, CiPenpot } from "react-icons/ci";
 
 export const Rules = [
   {
@@ -81,25 +83,25 @@ export const getLinksBasedOnUserRole = (userRole) => {
           ],
         },
         {
-          title: 'Editor',
+          title: 'Editors',
           links: [
             {
               name: 'Create Questions',
-              icon: <FiBook />,
+              icon: <CiEdit />,
             },
             {
-              name: 'Answer Questions',
-              icon: <FiBook />,
+              name: 'Peer Evalution',
+              icon: <FcSurvey />,
             },
             {
               name: 'Total Questions',
-              icon: <FiBook />,
+              icon: <CiGrid2V />,
             },
             {
               name: 'My Questions',
-              icon: <FiBook />,
+              icon: <CiPenpot />,
             },
-            
+
           ],
         },
       ];
@@ -126,6 +128,24 @@ export const getLinksBasedOnUserRole = (userRole) => {
               name: 'My Events',
               icon: <RiContactsLine />,
             },
+          ],
+        },
+        {
+          title: 'Editor',
+          links: [
+            {
+              name: 'Create Questions',
+              icon: <CiEdit />,
+            },
+            {
+              name: 'Peer Evalution',
+              icon: <FcSurvey />,
+            },
+            {
+              name: 'My Questions',
+              icon: <CiPenpot />,
+            },
+
           ],
         },
       ];

@@ -27,7 +27,7 @@ function Body() {
         })
             .then((res1) => {
                 setMyEventsDetails([res1.data]);
-                console.log(res1.data)
+                // console.log(res1.data)
             })
             .catch((err) => {
                 console.log(err);

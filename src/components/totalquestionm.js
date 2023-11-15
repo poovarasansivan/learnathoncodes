@@ -14,6 +14,7 @@ import { useEffect } from 'react';
 import Host from './api';
 import axios from "axios";
 import { IoIosArrowDown } from "react-icons/io";
+import DOMPurify from 'dompurify';
 
 export default function MyQuestionTable() {
     const navigate = useNavigate();
@@ -27,7 +28,7 @@ export default function MyQuestionTable() {
     const [loading, setLoading] = useState(true);
     const [showDetails, setShowDetails] = useState({});
 
-    console.log(data)
+    // console.log(data)
     useEffect(() => {
         axios({
             url: `${Host}/TotalQuestion`,
@@ -42,7 +43,14 @@ export default function MyQuestionTable() {
                 setLoading(false);
             });
     }, []);
-
+    if (loading) {
+        return <div className='mt-5'>Loading...</div>;
+    }
+    
+    if (!data || data.length === 0) {
+        return <div className='mt-5'>No questions added yet.</div>;
+    }
+    
     const indexOfLastRow = currentPage * rowsPerPage;
     const indexOfFirstRow = indexOfLastRow - rowsPerPage;
     const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);
@@ -54,17 +62,41 @@ export default function MyQuestionTable() {
     const handlePrevPage = () => {
         setCurrentPage(currentPage - 1);
     }
-    function generateCSV() {
-        const csvContent = "Category,Topic,Scenario,Question 1,Question 2,CreatorName\n" +
-            data.map(row => `"${row.category_name}","${row.topics}","${row.scenario.replace(/"/g, '""')}","${row.question_1.replace(/"/g, '""')}","${row.question_2.replace(/"/g, '""')}","${row.name}"`).join('\n');
-    
+    function htmlToPlainText(html) {
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        return doc.body.textContent || "";
+      }
+      
+      function htmlToPlainText(html) {
+        var doc = new DOMParser().parseFromString(html, 'text/html');
+        return doc.body.textContent || '';
+      }
+      
+      function generateCSV() {
+        const csvContent =
+          'Team Name,CreatorName,Category,Topic,Scenario,Question 1,Question 2,Question 3\n' +
+          data
+            .map(
+              (row) =>
+                `"${row.Team_Name}","${row.name}","${row.category_name}","${row.topics}","${htmlToPlainText(
+                  row.scenario
+                ).replace(/"/g, '""')}","${htmlToPlainText(
+                  row.question_1
+                ).replace(/"/g, '""')}","${htmlToPlainText(
+                  row.question_2
+                ).replace(/"/g, '""')}","${row.question_3}"`
+            )
+            .join('\n');
+      
         const blob = new Blob([csvContent], { type: 'text/csv' });
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
         link.download = 'questions.csv';
         link.click();
-    }
-    
+      }
+      
+      
+
 
     if (loading) {
         return <div>Loading...</div>;
@@ -108,7 +140,7 @@ export default function MyQuestionTable() {
                                         </TableCell>
                                         <TableCell align="left">{row.category_name}</TableCell>
                                         <TableCell align="left">{row.topics}</TableCell>
-                                        <TableCell align="left">{row.scenario}</TableCell>
+                                        <TableCell align="left">{<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(row.scenario) }} />}</TableCell>
                                         <TableCell align="left">
                                             <button onClick={toggleDetails} className="text-blue-500 hover:bg-slate-100 rounded-full"><IoIosArrowDown className='w-5 h-5' /></button>
                                         </TableCell>
@@ -117,9 +149,22 @@ export default function MyQuestionTable() {
                                         <TableRow>
                                             <TableCell colSpan={5}>
                                                 <div className="p-4 bg-gray-100">
-                                                    <p className=''>Question 1:  {row.question_1}</p>
-                                                    <p>Question 2:  {row.question_2}</p>
-                                                    <p>Creator Name:  {row.name}</p>
+                                                    <div className="mb-2">
+                                                        <p className="font-medium">Question 1:</p>
+                                                        <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(row.question_1) }} />
+                                                    </div>
+                                                    <div className="mb-2">
+                                                        <p className="font-medium">Question 2:</p>
+                                                        <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(row.question_2) }} />
+                                                    </div>
+                                                    <div className="mb-2">
+                                                        <p className="font-medium">Question 3:</p>
+                                                        <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(row.question_3) }} />
+                                                    </div>
+                                                    <div className="mb-2">
+                                                        <p className="font-medium">Creator Name:</p>
+                                                        <p>{row.name}</p>
+                                                    </div>
                                                 </div>
                                             </TableCell>
                                         </TableRow>
