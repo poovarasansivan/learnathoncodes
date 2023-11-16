@@ -1,18 +1,19 @@
-import Dashboard from "./Dashboard"
-import Register from "./Register"
-import Category from "./category"
+import Dashboard from "../pages/homePage/Dashboard"
+import Register from "../pages/register/Register"
+import Category from "../pages/category/category"
 import Form from "./Form"
-import Details from "./Details"
-import Events from "./Events"
-import TotalUsers from "./TotalUsers"
-import Tablemodal from "./tablemodal"
-import Users from "./users"
-import MyEvents from "./myEvents"
-import Allusers from "./allusers"
-import MyEventDetails from "./myeventDetails"
-import AnswerQuestion from "./answerQuestion";
-import MyQuestions from "./myQuestions"
-import TotalQuestions from "./totalQuestions"
+import Details from "../pages/categoryDetails/Details"
+import Events from "../pages/events/Events"
+import TotalUsers from "../pages/totalUsers/TotalUsers"
+import Tablemodal from "../pages/totalUsers/tablemodal"
+import Users from "../pages/users/users"
+import MyEvents from "../pages/myEvents/myEvents"
+import Allusers from "../pages/users/allusers"
+import MyEventDetails from "../pages/myEvents/myeventDetails"
+import AnswerQuestion from "../pages/peerevalution/answerQuestion";
+import MyQuestions from "../pages/myQuestions/myQuestions"
+import TotalQuestions from "../pages/totalQuestions/totalQuestions"
+
 export {
   TotalQuestions,
   AnswerQuestion,

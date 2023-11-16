@@ -3,7 +3,7 @@ import { FiHome, FiBook } from 'react-icons/fi';
 import { IoMdContacts } from 'react-icons/io';
 import { RiContactsLine } from 'react-icons/ri';
 import axios from 'axios';
-import Host from '../components/api';
+import Host from './api';
 
 export const RoleLinks = () => {
     const [userRole, setUserRole] = useState('');

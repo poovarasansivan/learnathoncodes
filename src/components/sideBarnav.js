@@ -3,7 +3,7 @@ import { FiSettings } from 'react-icons/fi';
 import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 import { useStateContext } from '../contexts/contextProvider';
 import Navbar from './navbar';
-import Sidebar from './sidebar';
+import Sidebar from './navigation/sidebar';
 // import { useNavigate } from 'react-router-dom';
 export default function SideBarnav(props) {
     // const navigate = useNavigate();
