@@ -15,7 +15,6 @@ export default function Register() {
     <SideBarnav body={<Body />} />
   );
 }
-
 function Body() {
   const navigate = useNavigate();
 

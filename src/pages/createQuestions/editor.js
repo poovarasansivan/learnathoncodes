@@ -255,13 +255,13 @@ function Body() {
                     <div key={index} className="mb-5">
                         {index !== 0 && <hr className="my-4 border-t border-gray-300" />} {/* Separator line */}
                         <div className="flex">
-                        <p className="text-xl text-red-500 font-medium mb-3">* Note : </p>
-                        <p className="text-lg font-normal mb-3 ml-1">Should not insert only image inside the editor</p>
+                            <p className="text-xl text-red-500 font-medium mb-3">* Note : </p>
+                            <p className="text-lg font-normal mb-3 ml-1">Should not insert only image inside the editor</p>
                         </div>
                         <p className="text-xl font-medium mb-4 ml=1">Topic {index + 1}</p>
-                        
+
                         <div className="flex items-center justify-between">
-                          
+
                             <TextField
                                 id={`category-${index}`}
                                 select
@@ -299,16 +299,14 @@ function Body() {
                             pasteCleanupSettings={{
                                 prompt: false
                             }}
-
-
                             created={() => {
                                 editorRef.current.element.addEventListener("input", () => handleScenarioChange(index, editorRef.current.getHtml()));
                             }}
-
+                            style={{ maxWidth: '1400px', maxHeight: '200px', overflowY: 'auto' }}
                         >
-
                             <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
                         </RichTextEditorComponent>
+
 
                         <p className="text-xl font-medium mt-4">Scenario Question 1</p>
                         <RichTextEditorComponent
@@ -327,6 +325,7 @@ function Body() {
                             created={() => {
                                 question1Refs.current[index].current.element.addEventListener("input", () => handleQuestionChange(index, question1Refs.current[index].current.getHtml(), 'question1'));
                             }}
+                            style={{ maxWidth: '1400px', maxHeight: '200px', overflowY: 'auto' }}
                         >
                             <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
                         </RichTextEditorComponent>
@@ -350,6 +349,7 @@ function Body() {
                             created={() => {
                                 question_1_keyRefs.current[index].current.element.addEventListener("input", () => handleQuestionChange(index, question_1_keyRefs.current[index].current.getHtml(), 'question_1_key'));
                             }}
+                            style={{ maxWidth: '1400px', maxHeight: '200px', overflowY: 'auto' }}
                         >
                             <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
                         </RichTextEditorComponent>
@@ -372,6 +372,7 @@ function Body() {
                             created={() => {
                                 question2Refs.current[index].current.element.addEventListener("input", () => handleQuestionChange(index, question2Refs.current[index].current.getHtml(), 'question2'));
                             }}
+                            style={{ maxWidth: '1400px', maxHeight: '200px', overflowY: 'auto' }}
                         >
                             <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
                         </RichTextEditorComponent>
@@ -394,6 +395,7 @@ function Body() {
                             created={() => {
                                 question_2_keyRefs.current[index].current.element.addEventListener("input", () => handleQuestionChange(index, question_2_keyRefs.current[index].current.getHtml(), 'question_2_key'));
                             }}
+                            style={{ maxWidth: '1400px', maxHeight: '200px', overflowY: 'auto' }}
                         >
                             <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
                         </RichTextEditorComponent>
@@ -416,6 +418,7 @@ function Body() {
                             created={() => {
                                 question3Refs.current[index].current.element.addEventListener("input", () => handleQuestionChange(index, question3Refs.current[index].current.getHtml(), 'question3'));
                             }}
+                            style={{ maxWidth: '1400px', maxHeight: '200px', overflowY: 'auto' }}
                         >
                             <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
                         </RichTextEditorComponent>
@@ -438,6 +441,7 @@ function Body() {
                             created={() => {
                                 question_3_keyRefs.current[index].current.element.addEventListener("input", () => handleQuestionChange(index, question_3_keyRefs.current[index].current.getHtml(), 'question_3_key'));
                             }}
+                            style={{ maxWidth: '1400px', maxHeight: '200px', overflowY: 'auto' }}
                         >
                             <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
                         </RichTextEditorComponent>

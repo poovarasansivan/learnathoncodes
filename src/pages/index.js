@@ -13,8 +13,9 @@ import MyEventDetails from "../pages/myEvents/myeventDetails"
 import AnswerQuestion from "../pages/peerevalution/answerQuestion";
 import MyQuestions from "../pages/myQuestions/myQuestions"
 import TotalQuestions from "../pages/totalQuestions/totalQuestions"
-
+import AnswersTable from "./peerevalution/answersTable";
 export {
+  AnswersTable,
   TotalQuestions,
   AnswerQuestion,
   MyQuestions,
