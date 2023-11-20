@@ -65,11 +65,11 @@ export default function AnswersTable() {
 
     return (
         <>
-            <TableContainer component={Paper}>
-                <Table aria-label="simple table">
+            <TableContainer component={Paper} style={{width:1450}} >
+                <Table  aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>SNo</TableCell>
+                            <TableCell style={{width:80}}>SNo</TableCell>
                             <TableCell>Scenario</TableCell>
                             <TableCell>Status</TableCell>
                         </TableRow>

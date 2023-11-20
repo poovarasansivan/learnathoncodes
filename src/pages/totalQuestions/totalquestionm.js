@@ -46,11 +46,11 @@ export default function MyQuestionTable() {
     if (loading) {
         return <div className='mt-5'>Loading...</div>;
     }
-    
+
     if (!data || data.length === 0) {
         return <div className='mt-5'>* No questions added yet.</div>;
     }
-    
+
     const indexOfLastRow = currentPage * rowsPerPage;
     const indexOfFirstRow = indexOfLastRow - rowsPerPage;
     const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);
@@ -65,37 +65,37 @@ export default function MyQuestionTable() {
     function htmlToPlainText(html) {
         var doc = new DOMParser().parseFromString(html, 'text/html');
         return doc.body.textContent || "";
-      }
-      
-      function htmlToPlainText(html) {
+    }
+
+    function htmlToPlainText(html) {
         var doc = new DOMParser().parseFromString(html, 'text/html');
         return doc.body.textContent || '';
-      }
-      
-      function generateCSV() {
+    }
+
+    function generateCSV() {
         const csvContent =
-          'Team Name,CreatorName,Category,Topic,Scenario,Question 1,Question 2,Question 3\n' +
-          data
-            .map(
-              (row) =>
-                `"${row.Team_Name}","${row.name}","${row.category_name}","${row.topics}","${htmlToPlainText(
-                  row.scenario
-                ).replace(/"/g, '""')}","${htmlToPlainText(
-                  row.question_1
-                ).replace(/"/g, '""')}","${htmlToPlainText(
-                  row.question_2
-                ).replace(/"/g, '""')}","${row.question_3}"`
-            )
-            .join('\n');
-      
+            'Team Name,CreatorName,Category,Topic,Scenario,Question 1,Question 2,Question 3\n' +
+            data
+                .map(
+                    (row) =>
+                        `"${row.Team_Name}","${row.name}","${row.category_name}","${row.topics}","${htmlToPlainText(
+                            row.scenario
+                        ).replace(/"/g, '""')}","${htmlToPlainText(
+                            row.question_1
+                        ).replace(/"/g, '""')}","${htmlToPlainText(
+                            row.question_2
+                        ).replace(/"/g, '""')}","${row.question_3}"`
+                )
+                .join('\n');
+
         const blob = new Blob([csvContent], { type: 'text/csv' });
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
         link.download = 'questions.csv';
         link.click();
-      }
-      
-      
+    }
+
+
 
 
     if (loading) {

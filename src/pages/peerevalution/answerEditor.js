@@ -140,12 +140,14 @@ export default function AnswerEditor() {
     const handleNextQuestion = () => {
         if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
+            window.scrollTo(0, 0);
         }
     }
 
     const handlePreviousQuestion = () => {
         if (currentQuestionIndex > 0) {
             setCurrentQuestionIndex(currentQuestionIndex - 1);
+            window.scrollTo(0, 0);
         }
     }
     useEffect(() => {
@@ -158,7 +160,7 @@ export default function AnswerEditor() {
             method: "GET"
         })
             .then((res) => {
-                setData(res.data.data); // Assuming that res.data.data contains the rubrics array
+                setData(res.data.data); 
             })
             .catch((err) => {
                 console.log(err);
@@ -202,7 +204,7 @@ export default function AnswerEditor() {
                                 <p className='font-small text-base mb-3'>
                                     <div dangerouslySetInnerHTML={{ __html: questions[currentQuestionIndex].question_1 }} />
                                 </p>
-                                <RichTextEditorComponent
+                                {/* <RichTextEditorComponent
                                     ref={(editor) => (question1Refs.current[currentQuestionIndex] = editor)}
                                     placeholder="Enter your Answers here..."
                                     onPaste={(e) => e.preventDefault()}
@@ -217,14 +219,14 @@ export default function AnswerEditor() {
                                     }}
                                 >
                                     <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
-                                </RichTextEditorComponent>
+                                </RichTextEditorComponent> */}
                             </div>
                             <div className='mt-5'>
                                 <p className='font-medium text-xl mb-2'>Question 2</p>
                                 <p className='font-small text-base mb-3'>
                                     <div dangerouslySetInnerHTML={{ __html: questions[currentQuestionIndex].question_2 }} />
                                 </p>
-                                <div>
+                                {/* <div>
                                     <RichTextEditorComponent
                                         ref={(editor) => (question2Refs.current[currentQuestionIndex] = editor)}
                                         placeholder="Enter your Answers here..."
@@ -241,14 +243,14 @@ export default function AnswerEditor() {
                                     >
                                         <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
                                     </RichTextEditorComponent>
-                                </div>
+                                </div> */}
                             </div>
                             <div className='mt-5'>
                                 <p className='font-medium text-xl mb-2'>Question 3</p>
                                 <p className='font-small text-base mb-3'>
                                     <div dangerouslySetInnerHTML={{ __html: questions[currentQuestionIndex].question_3 }} />
                                 </p>
-                                <div>
+                                {/* <div>
                                     <RichTextEditorComponent
                                         ref={(editor) => (question3Refs.current[currentQuestionIndex] = editor)}
                                         placeholder="Enter your Answers here..."
@@ -265,7 +267,7 @@ export default function AnswerEditor() {
                                     >
                                         <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
                                     </RichTextEditorComponent>
-                                </div>
+                                </div> */}
                             </div>
                         </div>
                     )}
@@ -314,7 +316,6 @@ export default function AnswerEditor() {
                     <Button variant="contained" disabled={currentQuestionIndex === questions.length - 1} onClick={handleNextQuestion}>Next Question</Button>
                 </Stack>
             </div>
-
         </>
     );
 }
