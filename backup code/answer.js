@@ -11,24 +11,24 @@ import {
 } from '@syncfusion/ej2-react-richtexteditor';
 import Button from '@mui/material/Button';
 import axios from "axios";
-import Host from "./api";
+import Host from "../../components/api";
 import { useNavigate } from 'react-router-dom';
 
 export default function AnswerEditor() {
-    const [data, setData] = useState([]);
     const [categoryID, setCategoryID] = useState();
     const [loading, setLoading] = useState(true);
     const [idsForUpdate, setIdsForUpdate] = useState([]);
     const [questions, setquestions] = useState([]);
     const [insertionFlag, setInsertionFlag] = useState(false);
     const [saveButtonActive, setSaveButtonActive] = useState(true);
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-
     const [answers, setAnswers] = useState([]);
-
+    const [data, setData] = useState([]);
     const question1Refs = useRef([]);
     const question2Refs = useRef([]);
+    const question3Refs = useRef([]);
     const navigate = useNavigate();
+
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
     var id = sessionStorage.getItem("user_id")
     if (id === null || id === undefined) {
@@ -44,6 +44,7 @@ export default function AnswerEditor() {
             }
         })
             .then((res1) => {
+                // console.log(res1)
                 setCategoryID(res1.data.event.event_category_id);
             })
             .catch((err) => {
@@ -51,37 +52,16 @@ export default function AnswerEditor() {
             });
     }, []);
 
-    useEffect(() => {
-        if (categoryID) {
-            axios({
-                url: `${Host}/GetAllQuestion`,
-                method: "POST",
-                data: {
-                    category_id: categoryID,
-                    created_by: sessionStorage.getItem('user_id'),
-                }
-            })
-                .then((res1) => {
-                    setData(res1.data.events);
-                    setLoading(false);
-                    const id = res1.data.events.map(item => item.id);
-                    setIdsForUpdate(id);
-                })
-                .catch((err) => {
-                    console.log(err);
-                    setLoading(false);
-                });
-        }
-    }, [categoryID]);
 
     useEffect(() => {
         const fetchButtonStatus = () => {
             axios.get(`${Host}/ButtonStatus`)
                 .then((res) => {
                     let data = res.data;
+                    // console.log(res)
+
                     const buttonStatus = data.events[0].save_answer === 1;
                     setSaveButtonActive(buttonStatus);
-
                 })
                 .catch((err) => {
                     console.log(err);
@@ -91,24 +71,10 @@ export default function AnswerEditor() {
 
         const interval = setInterval(() => {
             fetchButtonStatus();
-        }, 3000);
+        }, 60000);
 
         return () => clearInterval(interval);
     }, []);
-
-    const insertQuestionAssigned = async (categoryID, questionIDs) => {
-        try {
-            const response = await axios.post(`${Host}/InsertAssignQuestion`, {
-                category_id: categoryID,
-                question_id: idsForUpdate,
-                assigned_to: sessionStorage.getItem('user_id'),
-            });
-            console.log(response.data);
-            setInsertionFlag(true);
-        } catch (error) {
-            console.error(error);
-        }
-    };
 
     useEffect(() => {
         axios({
@@ -119,6 +85,7 @@ export default function AnswerEditor() {
             }
         })
             .then((res1) => {
+                // console.log(res1)
                 setquestions(res1.data.events);
             })
             .catch((err) => {
@@ -126,99 +93,228 @@ export default function AnswerEditor() {
             });
     }, []);
 
-    const handleNextQuestion = () => {
-        if (currentQuestionIndex < questions.length - 1) {
-            setCurrentQuestionIndex(currentQuestionIndex + 1);
-        }
-    };
 
-    const handlePreviousQuestion = () => {
-        if (currentQuestionIndex > 0) {
-            setCurrentQuestionIndex(currentQuestionIndex - 1);
-        }
-    };
 
-    const currentQuestion = questions[currentQuestionIndex];
 
-    const handleInsertAnswers = async (answers) => {
+    const handleSaveAnswers = () => {
+        const updatedAnswer = {
+            answered_by: sessionStorage.getItem('user_id'),
+            questionset_id: questions[currentQuestionIndex].id,
+            question_1_ans: question1Refs.current[currentQuestionIndex]?.value || '',
+            question_2_ans: question2Refs.current[currentQuestionIndex]?.value || '',
+            question_3_ans: question3Refs.current[currentQuestionIndex]?.value || '',
+        };
+        window.scrollTo(0, 0);
+
         try {
-            const response = await axios.post(`${Host}/InsertAnswer`, answers);
-            console.log(response.data);
+            axios.post(`${Host}/InsertAnswer`, [updatedAnswer]);
+            var tempData = [];
+            data.forEach(element => {
+                tempData.push({
+                    question_id: element.question_id,
+                    criteria_id: element.criteria_id,
+                    selected: parseInt(element.selected),
+                    created_by: element.created_by
+                })
+            });
+            axios.post(`${Host}/RubricsData`, tempData);
+            // console.log(tempData)
+            setInsertionFlag(true);
+            setData([])
+            fetchRubrics()
+
+            // Clear editor content after saving
+            if (question1Refs.current[currentQuestionIndex]) {
+                question1Refs.current[currentQuestionIndex].value = '';
+            }
+            if (question2Refs.current[currentQuestionIndex]) {
+                question2Refs.current[currentQuestionIndex].value = '';
+            }
+            if (question3Refs.current[currentQuestionIndex]) {
+                question3Refs.current[currentQuestionIndex].value = '';
+            }
         } catch (error) {
             console.error(error);
         }
     };
 
-    const handleSaveAnswers = () => {
-        const updatedAnswers = questions.map((item, index) => ({
-            answered_by: sessionStorage.getItem('user_id'),
-            scenario: item.scenario,
-            question_1: item.question_1,
-            question_1_ans: question1Refs.current[index].value,
-            question_2: item.question_2,
-            question_2_ans: question2Refs.current[index].value,
-        }));
+    const handleNextQuestion = () => {
+        if (currentQuestionIndex < questions.length - 1) {
+            setCurrentQuestionIndex(currentQuestionIndex + 1);
+            window.scrollTo(0, 0);
+        }
+    }
 
-        setAnswers(updatedAnswers);
+    const handlePreviousQuestion = () => {
+        if (currentQuestionIndex > 0) {
+            setCurrentQuestionIndex(currentQuestionIndex - 1);
+            window.scrollTo(0, 0);
+        }
+    }
+    useEffect(() => {
+        fetchRubrics()
+    }, []);
 
-        updatedAnswers.forEach((answer, index) => {
-            console.log(`Scenario ${index + 1}:`, answer);
+    const fetchRubrics = () => {
+        axios({
+            url: `${Host}/rubrics/getAll`,
+            method: "GET"
+        })
+            .then((res) => {
+                setData(res.data.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    const handleRadioChange = (criteria_id, rubrics_id) => {
+        const updatedData = data.map(item => {
+            if (item.criteria_id === criteria_id) {
+                return {
+                    ...item,
+                    selected: rubrics_id,
+                    created_by: sessionStorage.getItem("user_id"),
+                    question_id: questions[currentQuestionIndex].id,
+                };
+            }
+            return item;
         });
-        handleInsertAnswers(updatedAnswers);
+
+        setData(updatedData);
     };
 
+
+    if (!questions || questions.length === 0) {
+        return <div>No questions assigned to you.</div>;
+    }
     return (
-        <div>
-            {loading && <div>Loading...</div>}
-            {!loading && questions.length > 0 && (
-                <div className='mt-5'>
-                    <div key={currentQuestionIndex}>
-                        <p className='font-medium text-xl mb-2'>Scenario {currentQuestionIndex + 1}</p>
-                        <p className='font-small text-base mb-3'>
-                            <div dangerouslySetInnerHTML={{ __html: currentQuestion.scenario }} />
-                        </p>
+        <>
+            <div>
+                <div className='mt-7'>
+                    {questions[currentQuestionIndex] && (
                         <div>
-                            <p className='font-medium text-xl mb-2'>Question 1</p>
+                            <p className='font-medium text-xl mb-2'>Scenario {currentQuestionIndex + 1}</p>
                             <p className='font-small text-base mb-3'>
-                                <div dangerouslySetInnerHTML={{ __html: currentQuestion.question_1 }} />
+                                <div dangerouslySetInnerHTML={{ __html: questions[currentQuestionIndex].scenario }} />
                             </p>
-                            <RichTextEditorComponent
-                                ref={(editor) => (question1Refs.current[currentQuestionIndex] = editor)}
-                                placeholder="Enter your Answers here..."
-                                onPaste={(e) => e.preventDefault()}
-                                pasteCleanupSettings={{
-                                    prompt: false
-                                }}
-                            >
-                                <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
-                            </RichTextEditorComponent>
+                            <div>
+                                <p className='font-medium text-xl mb-2'>Question 1</p>
+                                <p className='font-small text-base mb-3'>
+                                    <div dangerouslySetInnerHTML={{ __html: questions[currentQuestionIndex].question_1 }} />
+                                </p>
+                                {/* <RichTextEditorComponent
+                                    ref={(editor) => (question1Refs.current[currentQuestionIndex] = editor)}
+                                    placeholder="Enter your Answers here..."
+                                    onPaste={(e) => e.preventDefault()}
+                                    insertImageSettings={{
+                                        // allowedTypes: ['.jpeg', '.jpg', '.png'],
+                                        display: 'inline',
+                                        saveUrl: `${Host}/uploadImage`,
+                                        path: `${Host}/serveImage/`,
+                                    }}
+                                    pasteCleanupSettings={{
+                                        prompt: false
+                                    }}
+                                >
+                                    <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
+                                </RichTextEditorComponent> */}
+                            </div>
+                            <div className='mt-5'>
+                                <p className='font-medium text-xl mb-2'>Question 2</p>
+                                <p className='font-small text-base mb-3'>
+                                    <div dangerouslySetInnerHTML={{ __html: questions[currentQuestionIndex].question_2 }} />
+                                </p>
+                                {/* <div>
+                                    <RichTextEditorComponent
+                                        ref={(editor) => (question2Refs.current[currentQuestionIndex] = editor)}
+                                        placeholder="Enter your Answers here..."
+                                        onPaste={(e) => e.preventDefault()}
+                                        insertImageSettings={{
+                                            // allowedTypes: ['.jpeg', '.jpg', '.png'],
+                                            display: 'inline',
+                                            saveUrl: `${Host}/uploadImage`,
+                                            path: `${Host}/serveImage/`,
+                                        }}
+                                        pasteCleanupSettings={{
+                                            prompt: false
+                                        }}
+                                    >
+                                        <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
+                                    </RichTextEditorComponent>
+                                </div> */}
+                            </div>
+                            <div className='mt-5'>
+                                <p className='font-medium text-xl mb-2'>Question 3</p>
+                                <p className='font-small text-base mb-3'>
+                                    <div dangerouslySetInnerHTML={{ __html: questions[currentQuestionIndex].question_3 }} />
+                                </p>
+                                {/* <div>
+                                    <RichTextEditorComponent
+                                        ref={(editor) => (question3Refs.current[currentQuestionIndex] = editor)}
+                                        placeholder="Enter your Answers here..."
+                                        onPaste={(e) => e.preventDefault()}
+                                        insertImageSettings={{
+                                            // allowedTypes: ['.jpeg', '.jpg', '.png'],
+                                            display: 'inline',
+                                            saveUrl: `${Host}/uploadImage`,
+                                            path: `${Host}/serveImage/`,
+                                        }}
+                                        pasteCleanupSettings={{
+                                            prompt: false
+                                        }}
+                                    >
+                                        <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
+                                    </RichTextEditorComponent>
+                                </div> */}
+                            </div>
                         </div>
-                        <div className='mt-5'>
-                            <p className='font-medium text-xl mb-2'>Question 2</p>
-                            <p className='font-small text-base mb-3'>
-                                <div dangerouslySetInnerHTML={{ __html: currentQuestion.question_2 }} />
-                            </p>
-                            <RichTextEditorComponent
-                                ref={(editor) => (question2Refs.current[currentQuestionIndex] = editor)}
-                                placeholder="Enter your Answers here..."
-                                onPaste={(e) => e.preventDefault()}
-                                pasteCleanupSettings={{
-                                    prompt: false
-                                }}
-                            >
-                                <Inject services={[HtmlEditor, Toolbar, Image, Link, QuickToolbar]} />
-                            </RichTextEditorComponent>
-                        </div>
-                    </div>
-                    <Stack spacing={2} direction="row" className='flex justify-between mt-6'>
-                        <Button variant="contained" disabled={currentQuestionIndex === 0} onClick={handlePreviousQuestion}>Previous</Button>
-                        <Button variant="contained" disabled={currentQuestionIndex === questions.length - 1} onClick={handleNextQuestion}>Next</Button>
-                    </Stack>
-                    <Stack spacing={2} direction="row" className='flex justify-center mt-6'>
-                        <Button variant="contained" disabled={!saveButtonActive} onClick={handleSaveAnswers}>Save Answers</Button>
-                    </Stack>
+                    )}
                 </div>
-            )}
-        </div>
+
+
+                <div className="overflow-x-auto mt-8">
+                    <table className="min-w-full bg-white border border-gray-300">
+                        <thead className="bg-gray-200">
+                            <tr>
+                                <th className="py-2 px-4 border">S.No</th>
+                                <th className="py-2 px-4 border">Criteria</th>
+                                <th className="py-2 px-4 border">Rubrics 1</th>
+                                <th className="py-2 px-4 border">Rubrics 2</th>
+                                <th className="py-2 px-4 border">Rubrics 3</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.map((item, index) => (
+                                <tr key={index}>
+                                    <td className="py-2 px-4 border">{index + 1}</td>
+                                    <td className="py-2 px-4 border">{item.criteria_name}</td>
+                                    {item.rubrics.map((rubric) => (
+                                        <td className="py-2 px-4 border" key={rubric.rubrics_id}>
+                                            <div>
+                                                <input
+                                                    type="radio"
+                                                    name={`rubric-${item.criteria_id}`}
+                                                    value={rubric.rubrics_id}
+                                                    checked={item.selected === rubric.rubrics_id}
+                                                    onChange={() => handleRadioChange(item.criteria_id, rubric.rubrics_id)}
+                                                    style={{ marginRight: '8px' }}
+                                                />
+                                                {rubric.rubrics_name}
+                                            </div>
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+                <Stack spacing={2} direction="row" className='flex justify-center mt-6'>
+                    <Button variant="contained" disabled={currentQuestionIndex === 0} onClick={handlePreviousQuestion}>Previous Question</Button>
+                    <Button variant="contained" disabled={!saveButtonActive} onClick={handleSaveAnswers}>Save Answers</Button>
+                    <Button variant="contained" disabled={currentQuestionIndex === questions.length - 1} onClick={handleNextQuestion}>Next Question</Button>
+                </Stack>
+            </div>
+        </>
     );
 }

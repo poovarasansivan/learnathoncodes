@@ -1,3 +1,3 @@
-const Host = "https://learnathon.bitsathy.ac.in/api";
+const Host = "http://localhost:8080/api";
 
 export default Host;

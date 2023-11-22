@@ -9,6 +9,7 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Host from '../../components/api';
+
 import axios from "axios";
 import { IoIosArrowDown } from "react-icons/io";
 import DOMPurify from 'dompurify';
@@ -19,17 +20,18 @@ export default function AnswersTable() {
     const [expandedRow, setExpandedRow] = useState(null);
     const itemsPerPage = 7;
     const [loading, setLoading] = useState(true);
-
+    const [id, setId] = useState([]);
     useEffect(() => {
         axios({
-            url: `${Host}/GetMyQuestion`,
+            url: `${Host}/GetMyassignQuestions`,
             method: "POST",
             data: {
-                created_by: sessionStorage.getItem("user_id")
+                User_1: sessionStorage.getItem("user_id")
             }
         })
             .then((res) => {
-                setData(res.data.events);
+                const ids = res.data.events.map(event => event.id);
+                setId(ids);
                 setLoading(false);
 
             })
@@ -38,7 +40,24 @@ export default function AnswersTable() {
                 setLoading(false);
             });
     }, []);
+    useEffect(() => {
+        axios({
+            url: `${Host}/QuestionSubmit`,
+            method: "GET",
+            data: {
+                
+                User_1: sessionStorage.getItem("user_id")
+            }
+        })
+            .then((res) => {
+               console.log("success")
 
+            })
+            .catch((err) => {
+                console.log(err);
+                setLoading(false);
+            });
+    }, []);
     const handleExpandRow = (index) => {
         setExpandedRow(index === expandedRow ? null : index);
     }
@@ -55,23 +74,22 @@ export default function AnswersTable() {
         return <div className='mt-5'>Loading...</div>;
     }
 
-    if (!data || data.length === 0) {
+    if (!id || id.length === 0) {
         return <div className='mt-5'>No questions has been Assigned for you..</div>;
     }
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-
+    const currentItems = id.slice(indexOfFirstItem, indexOfLastItem);
     return (
         <>
-            <TableContainer component={Paper} style={{width:1450}} >
-                <Table  aria-label="simple table">
+            <TableContainer component={Paper}  >
+                <Table aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell style={{width:80}}>SNo</TableCell>
-                            <TableCell>Scenario</TableCell>
-                            <TableCell>Status</TableCell>
+                            <TableCell >SNo</TableCell>
+                            <TableCell >Question Id</TableCell>
+                            <TableCell >Status</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -79,7 +97,7 @@ export default function AnswersTable() {
                             <React.Fragment key={index}>
                                 <TableRow>
                                     <TableCell>{indexOfFirstItem + index + 1}</TableCell>
-                                    <TableCell>{<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(row.scenario) }} />}</TableCell>
+                                    <TableCell>{row}</TableCell>
                                     <TableCell>Not submitted</TableCell>
                                 </TableRow>
                             </React.Fragment>

@@ -28,12 +28,12 @@ function Body() {
                 </div>
                 <AnswerEditor />
             </div>
-            {/* <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl ">
+            <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-white rounded-3xl ">
                 <div className="flex items-center justify-between mb-6">
                     <Header title="Question Answer Status" />
                 </div>
                 <AnswersTable />
-            </div> */}
+            </div>
         </>
     )
 }
