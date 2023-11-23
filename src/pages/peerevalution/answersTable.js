@@ -11,8 +11,6 @@ import Button from '@mui/material/Button';
 import Host from '../../components/api';
 
 import axios from "axios";
-import { IoIosArrowDown } from "react-icons/io";
-import DOMPurify from 'dompurify';
 
 export default function AnswersTable() {
     const [data, setData] = useState([]);
@@ -21,43 +19,43 @@ export default function AnswersTable() {
     const itemsPerPage = 7;
     const [loading, setLoading] = useState(true);
     const [id, setId] = useState([]);
+    console.log(id)
     useEffect(() => {
         axios({
             url: `${Host}/GetMyassignQuestions`,
             method: "POST",
             data: {
-                User_1: sessionStorage.getItem("user_id")
+                user_1: sessionStorage.getItem("user_id")
             }
         })
             .then((res) => {
-                const ids = res.data.events.map(event => event.id);
+                const ids = res.data.events.map(event => event.id); // Extracting 'id' property
                 setId(ids);
                 setLoading(false);
-
             })
             .catch((err) => {
                 console.log(err);
                 setLoading(false);
             });
     }, []);
+
     useEffect(() => {
         axios({
             url: `${Host}/QuestionSubmit`,
-            method: "GET",
+            method: "POST",
             data: {
-                
-                User_1: sessionStorage.getItem("user_id")
+                user_id: sessionStorage.getItem("user_id")
             }
         })
             .then((res) => {
-               console.log("success")
-
+                setData(res.data.events);
             })
             .catch((err) => {
                 console.log(err);
                 setLoading(false);
             });
     }, []);
+
     const handleExpandRow = (index) => {
         setExpandedRow(index === expandedRow ? null : index);
     }
@@ -75,21 +73,27 @@ export default function AnswersTable() {
     }
 
     if (!id || id.length === 0) {
-        return <div className='mt-5'>No questions has been Assigned for you..</div>;
+        return <div className='mt-5'>No questions have been assigned to you.</div>;
     }
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentItems = id.slice(indexOfFirstItem, indexOfLastItem);
+
+    const getStatus = (questionId) => {
+        const questionData = data.find(item => item.question_id === questionId);
+        return questionData ? (questionData.status === 1 ? 'Not submitted' : 'Submitted') : 'Not submitted';
+    }
+
     return (
         <>
             <TableContainer component={Paper}  >
                 <Table aria-label="simple table">
                     <TableHead>
                         <TableRow>
-                            <TableCell >SNo</TableCell>
-                            <TableCell >Question Id</TableCell>
-                            <TableCell >Status</TableCell>
+                            <TableCell>SNo</TableCell>
+                            <TableCell>Question Id</TableCell>
+                            <TableCell>Status</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -98,7 +102,7 @@ export default function AnswersTable() {
                                 <TableRow>
                                     <TableCell>{indexOfFirstItem + index + 1}</TableCell>
                                     <TableCell>{row}</TableCell>
-                                    <TableCell>Not submitted</TableCell>
+                                    <TableCell>{getStatus(row)}</TableCell>
                                 </TableRow>
                             </React.Fragment>
                         ))}
@@ -108,7 +112,7 @@ export default function AnswersTable() {
             <div className='flex justify-end mt-5'>
                 <Stack spacing={2} direction="row">
                     {currentPage > 1 && <Button variant='outlined' color="primary" onClick={handlePrevPage}>Previous Page</Button>}
-                    {data.length > currentPage * itemsPerPage && <Button variant='outlined' color="primary" onClick={handleNextPage}>Next Page</Button>}
+                    {id.length > currentPage * itemsPerPage && <Button variant='outlined' color="primary" onClick={handleNextPage}>Next Page</Button>}
                 </Stack>
             </div>
         </>

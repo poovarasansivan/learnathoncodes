@@ -7,12 +7,9 @@ import { useNavigate } from 'react-router-dom';
 
 export default function AnswerEditor() {
     const [categoryID, setCategoryID] = useState();
-    const [loading, setLoading] = useState(true);
-    const [idsForUpdate, setIdsForUpdate] = useState([]);
     const [questions, setquestions] = useState([]);
     const [insertionFlag, setInsertionFlag] = useState(false);
     const [saveButtonActive, setSaveButtonActive] = useState(true);
-    const [answers, setAnswers] = useState([]);
     const [data, setData] = useState([]);
     const [ids, setId] = useState([]);
     const question1Refs = useRef([]);
@@ -20,6 +17,7 @@ export default function AnswerEditor() {
     const question3Refs = useRef([]);
     const navigate = useNavigate();
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+
     var id = sessionStorage.getItem("user_id")
     if (id === null || id === undefined) {
         navigate('/login');
@@ -100,9 +98,6 @@ export default function AnswerEditor() {
             setCurrentQuestionIndex(parseInt(storedIndex, 10));
         }
     }, []);
-
-
-
 
     const handleSaveAnswers = () => {
         const updatedAnswer = {
