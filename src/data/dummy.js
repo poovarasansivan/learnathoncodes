@@ -101,6 +101,10 @@ export const getLinksBasedOnUserRole = (userRole) => {
               name: 'My Questions',
               icon: <CiPenpot />,
             },
+            {
+              name: 'Multiple Choice',
+              icon: <CiPenpot />,
+            },
 
           ],
         },

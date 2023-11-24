@@ -9,7 +9,6 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Host from '../../components/api';
-
 import axios from "axios";
 
 export default function AnswersTable() {
@@ -19,7 +18,7 @@ export default function AnswersTable() {
     const itemsPerPage = 7;
     const [loading, setLoading] = useState(true);
     const [id, setId] = useState([]);
-    console.log(id)
+
     useEffect(() => {
         axios({
             url: `${Host}/GetMyassignQuestions`,

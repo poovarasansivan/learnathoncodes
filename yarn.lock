@@ -2789,7 +2789,7 @@
 
 "@syncfusion/ej2-react-richtexteditor@^19.4.50":
   version "19.4.56"
-  resolved "https://registry.npmjs.org/@syncfusion/ej2-react-richtexteditor/-/ej2-react-richtexteditor-19.4.56.tgz"
+  resolved "https://registry.yarnpkg.com/@syncfusion/ej2-react-richtexteditor/-/ej2-react-richtexteditor-19.4.56.tgz#3b2b842031126b9a0c8fea272d48c8cfb8fedbef"
   integrity sha512-tK4lV/bi/3dhO8YGm161IDjvLccPD+m03ZoB2DL0STZeQVP5JdZckvTfZMiWqnkksB+WfLPROPCtrdBhs6nSTA==
   dependencies:
     "@syncfusion/ej2-base" "~19.4.52"

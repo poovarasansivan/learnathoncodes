@@ -14,7 +14,9 @@ import AnswerQuestion from "../pages/peerevalution/answerQuestion";
 import MyQuestions from "../pages/myQuestions/myQuestions"
 import TotalQuestions from "../pages/totalQuestions/totalQuestions"
 import AnswersTable from "./peerevalution/answersTable";
+import MCQ from "./mcq/mcq";
 export {
+  MCQ,
   AnswersTable,
   TotalQuestions,
   AnswerQuestion,

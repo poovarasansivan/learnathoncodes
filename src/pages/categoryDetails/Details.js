@@ -21,7 +21,6 @@ function Body() {
         navigate('/login');
     }
     const { categoryId } = useParams();
-    console.log(categoryId)
     const [categoryDetails, setCategoryDetails] = useState([]);
     // const [categoryCount, setcategoryCount] = useState([]);
     const [isAlreadyRegistered, setIsAlreadyRegistered] = useState(false);
@@ -29,10 +28,9 @@ function Body() {
     const navigateToRegister = (categoryId) => {
         navigate(`/Register/${categoryId}`);
     };
-
     useEffect(() => {
         // Fetch category details
-        axios.post(`${Host}/category/getDetails`, { id: parseInt(categoryId) })
+        axios.post(`${Host}/getDetails`, { id: parseInt(categoryId) })
             .then((res) => {
                 let data = res.data;
                 // console.log(data)

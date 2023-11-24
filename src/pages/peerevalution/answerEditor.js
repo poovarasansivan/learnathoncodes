@@ -167,7 +167,7 @@ export default function AnswerEditor() {
             data: questionStatusData
         })
             .then(response => {
-                console.log(response);
+               console.log("success")
             })
             .catch(error => {
                 console.error(error);

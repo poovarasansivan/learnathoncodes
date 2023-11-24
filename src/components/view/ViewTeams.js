@@ -82,7 +82,7 @@ const ViewTeams = ({ open, handleClose, selectedTeamId }) => {
                             </div>
                             <div className="flex items-start mb-2">
                                 <div className="font-medium text-lg text-gray-600">Team Member 1:</div>
-                                {teamData.name3 && <p className='ml-4 text-lg font-medium text-justify text-gray-600'>{teamData.name3}</p>}
+                                {teamData.name1 && <p className='ml-4 text-lg font-medium text-justify text-gray-600'>{teamData.name1}</p>}
                             </div>
                             <div className="flex items-start mb-2">
                                 <div className="font-medium text-lg text-gray-600">Team Member 2:</div>
@@ -90,7 +90,7 @@ const ViewTeams = ({ open, handleClose, selectedTeamId }) => {
                             </div>
                             <div className="flex items-start mb-2">
                                 <div className="font-medium text-lg text-gray-600">Team Member 3:</div>
-                                {teamData.name1 && <p className='ml-4 text-lg font-medium text-justify text-gray-600'>{teamData.name1}</p>}
+                                {teamData.name3 && <p className='ml-4 text-lg font-medium text-justify text-gray-600'>{teamData.name3}</p>}
                             </div>
 
                         </div>

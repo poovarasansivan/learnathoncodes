@@ -33,7 +33,7 @@ const Category = () => {
 
   useEffect(() => {
     axios({
-      url: `${Host}/category/getAll`,
+      url: `${Host}/getAll`,
       method: "GET"
     })
       .then((res1) => {

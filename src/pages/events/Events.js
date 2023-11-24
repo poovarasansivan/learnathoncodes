@@ -36,7 +36,7 @@ function Body() {
     const [EventsData, setEventsData] = useState([]);
     useEffect(() => {
         axios({
-            url: `${Host}/category/GetEvents`,
+            url: `${Host}/GetEvents`,
             method: "GET"
         })
             .then((res1) => {

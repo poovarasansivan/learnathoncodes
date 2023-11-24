@@ -49,7 +49,7 @@ function Body() {
     })
       .then((response) => {
         console.log("Data submitted successfully:", response.data);
-        // navigate('/Category');
+        navigate('/Category');
       })
       .catch((error) => {
         console.error("Error submitting data:", error);
@@ -60,7 +60,7 @@ function Body() {
 
   const getDetails = (rollno, user) => {
     axios({
-      url: `${Host}/users/${rollno}`,
+      url: `${Host}/userdetails/${rollno}`,
       method: "get",
     }).then((res) => {
       if (user === 2) {

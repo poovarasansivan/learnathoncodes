@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
-import { Dashboard, Details, Category, Events, TotalUsers, Users, AnswerQuestion, MyEvents, MyEventDetails, Register, Allusers, MyQuestions, TotalQuestions } from './pages'
+import { Dashboard, Details, Category, Events, TotalUsers, Users, AnswerQuestion, MyEvents, MyEventDetails, Register, Allusers, MyQuestions, TotalQuestions, MCQ } from './pages'
 import { ViewTeams, AddEvent, RoleLinks, CategoryForm, Question, Editor, AddnewTeams, NotFound } from './components'
 import Auth from './auth/login';
 function App() {
@@ -35,6 +35,7 @@ function App() {
                 <Route path="My Questions" element={<MyQuestions />} />
                 <Route path="Total Questions" element={<TotalQuestions />} />
                 <Route path="Peer Evalution" element={<AnswerQuestion />} />
+                <Route path="Multiple Choice" element={<MCQ />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
             {/* </AuthProvider> */}
