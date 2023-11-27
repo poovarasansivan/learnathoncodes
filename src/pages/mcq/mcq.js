@@ -9,7 +9,7 @@ import SideBarnav from "../../components/sideBarnav";
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 export default function MCQ() {
     return (
         <SideBarnav body={<Body />} />
@@ -17,6 +17,13 @@ export default function MCQ() {
 }
 
 function Body() {
+
+    const navigate = useNavigate();
+    var id = sessionStorage.getItem("user_id")
+    if (id === null || id === undefined) {
+        navigate('/login');
+    }
+
     const [saveButtonActive, setSaveButtonActive] = useState(true);
     const [currentTopic, setCurrentTopic] = useState(1);
     const [option1, setOption1] = useState('');
@@ -192,7 +199,7 @@ function Body() {
                 {topics.map((topic, index) => (
                     <div key={index} className="mb-5">
                         <div className="flex items-center justify-between">
-                            <p className="text-xl font-medium mt-4">MCQ </p>
+                            <p className="text-xl font-medium mt-4">MCQ {index + 1}</p>
                             {index > 0 && (
                                 <div className="cursor-pointer hover:bg-light-gray rounded-lg flex items-center" onClick={() => removeTopic(topic.id)}>
                                     <IoIosRemove color="#ef4444" className='w-6 h-6' />
@@ -200,7 +207,9 @@ function Body() {
                                 </div>
                             )}
                         </div>
+
                         <div className="mt-4">
+                            
                             <RichTextEditorComponent
                                 ref={questionRefs.current[index]}
                                 value={topic.question}
